@@ -1,24 +1,35 @@
 #pragma once
 #include <QMainWindow>
 #include <QTabWidget>
-#include "datastore.h" // твоя структура User, DataStore, Role
+#include <QStackedWidget>
+#include <QTableWidget>
+#include "datastore.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow(const User& u, DataStore* store, QWidget* parent = nullptr);
+    MainWindow(User u, DataStore* store, QWidget* parent = nullptr);
 
 private:
     void setupStudentUI();
     void setupTeacherUI();
     void setupAdminUI();
 
-    QWidget* createSchedulePage();
+    QWidget* createStudentPage();
+    QWidget* createStudentMarksPage();
     QWidget* createTeacherMarksPage();
     QWidget* createAdminPage();
 
+    void showStudentMarksPage();
+    void showStudentSchedulePage();
+    void refreshTeacherMarksPage();
+
     QTabWidget* m_tabs;
+    QStackedWidget* m_studentStack;
+    QTableWidget* m_teacherMarksTable;
+    QListWidget* m_classList;
+
     User m_user;
     DataStore* m_store;
 };

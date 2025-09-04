@@ -1,62 +1,57 @@
-#ifndef DATASTORE_H
-#define DATASTORE_H
-
-#include "user.h"
-#include <QObject>
-#include <QMap>
+#pragma once
+#include <QString>
 #include <QVector>
-#include <QDate>
-#include <QJsonDocument>
-#include <QFile>
-#include <QSet>
+#include <QStringList>
 
-struct Mark {
+enum class Role { Student, Teacher, Admin };
+
+struct Grade {
     QString subject;
-    int value = 0;   // 1-10
-    QDate date;
+    int grade;
+    QString comment;
 };
 
-class DataStore : public QObject {
-    Q_OBJECT
+struct User {
+    QString fullName;
+    QString username;
+    Role role;
+    int classNumber;     // номер класса
+    QString classLetter; // буква класса
+    QVector<Grade> grades;
+};
+
+class DataStore {
 public:
-    explicit DataStore(QObject* parent=nullptr);
+    QVector<User> m_users;
 
-    bool load();
-    bool save() const;
+    QVector<User>& allUsers() { return m_users; }
 
-    // Пользователи
-    bool addUser(const User& u);
-    bool removeUser(const QString& username);
-    bool userExists(const QString& username) const;
-    User getUser(const QString& username) const;
-    QList<User> allUsers() const;
+    void addUser(const User& u) { m_users.append(u); }
+    void deleteUser(const QString& username) {
+        for(int i=0;i<m_users.size();i++){
+            if(m_users[i].username==username) { m_users.remove(i); return; }
+        }
+    }
 
-    // Аутентификация
-    static QString hash(const QString& password);
-    bool verify(const QString& username, const QString& password, User* out=nullptr) const;
+    QStringList allClasses() const {
+        QStringList classes;
+        for(auto& u : m_users){
+            if(u.role==Role::Student){
+                QString c = QString::number(u.classNumber) + u.classLetter;
+                if(!classes.contains(c)) classes.append(c);
+            }
+        }
+        return classes;
+    }
 
-    // Оценки / пропуски (для учителей)
-    void addMark(const QString& student, const QString& subject, int value, const QDate& date);
-    QVector<Mark> getMarks(const QString& student) const;
-
-    void setAbsent(const QString& student, const QDate& date, bool absent);
-    bool isAbsent(const QString& student, const QDate& date) const;
-
-    // Расписание (для администратора)
-    QStringList getSchedule(int weekday) const; // 1=Пн
-    void setSchedule(int weekday, const QStringList& lessons);
-
-    QString dataPath() const { return m_path; }
-
-signals:
-    void changed();
-
-private:
-    QString m_path;
-    QMap<QString, User> m_users; // username -> User
-    QMultiMap<QString, Mark> m_marks; // student -> оценки
-    QMap<QString, QSet<QDate>> m_absents; // student -> дни отсутствия
-    QMap<int, QStringList> m_schedule; // день недели -> уроки
+    QStringList studentsInClass(const QString& className) const {
+        QStringList list;
+        for(auto& u : m_users){
+            if(u.role==Role::Student){
+                QString c = QString::number(u.classNumber)+u.classLetter;
+                if(c==className) list.append(u.fullName);
+            }
+        }
+        return list;
+    }
 };
-
-#endif
