@@ -73,6 +73,46 @@ build CMakeFiles/test1.dir/mainwindow.cpp.obj: CXX_COMPILER__test1_unscanned_Deb
   OBJECT_DIR = CMakeFiles\test1.dir
   OBJECT_FILE_DIR = CMakeFiles\test1.dir
 
+build CMakeFiles/test1.dir/datastore.cpp.obj: CXX_COMPILER__test1_unscanned_Debug D$:/project$ Qt/test1/datastore.cpp || cmake_object_order_depends_target_test1
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\test1.dir\datastore.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -I"D:/project Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/include" -isystem D:/Qt/6.9.2/mingw_64/include/QtCore -isystem D:/Qt/6.9.2/mingw_64/include -isystem D:/Qt/6.9.2/mingw_64/mkspecs/win32-g++ -isystem D:/Qt/6.9.2/mingw_64/include/QtWidgets -isystem D:/Qt/6.9.2/mingw_64/include/QtGui
+  OBJECT_DIR = CMakeFiles\test1.dir
+  OBJECT_FILE_DIR = CMakeFiles\test1.dir
+
+build CMakeFiles/test1.dir/logindialog.cpp.obj: CXX_COMPILER__test1_unscanned_Debug D$:/project$ Qt/test1/logindialog.cpp || cmake_object_order_depends_target_test1
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\test1.dir\logindialog.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -I"D:/project Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/include" -isystem D:/Qt/6.9.2/mingw_64/include/QtCore -isystem D:/Qt/6.9.2/mingw_64/include -isystem D:/Qt/6.9.2/mingw_64/mkspecs/win32-g++ -isystem D:/Qt/6.9.2/mingw_64/include/QtWidgets -isystem D:/Qt/6.9.2/mingw_64/include/QtGui
+  OBJECT_DIR = CMakeFiles\test1.dir
+  OBJECT_FILE_DIR = CMakeFiles\test1.dir
+
+build CMakeFiles/test1.dir/studentview.cpp.obj: CXX_COMPILER__test1_unscanned_Debug D$:/project$ Qt/test1/studentview.cpp || cmake_object_order_depends_target_test1
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\test1.dir\studentview.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -I"D:/project Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/include" -isystem D:/Qt/6.9.2/mingw_64/include/QtCore -isystem D:/Qt/6.9.2/mingw_64/include -isystem D:/Qt/6.9.2/mingw_64/mkspecs/win32-g++ -isystem D:/Qt/6.9.2/mingw_64/include/QtWidgets -isystem D:/Qt/6.9.2/mingw_64/include/QtGui
+  OBJECT_DIR = CMakeFiles\test1.dir
+  OBJECT_FILE_DIR = CMakeFiles\test1.dir
+
+build CMakeFiles/test1.dir/adminview.cpp.obj: CXX_COMPILER__test1_unscanned_Debug D$:/project$ Qt/test1/adminview.cpp || cmake_object_order_depends_target_test1
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\test1.dir\adminview.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -I"D:/project Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/include" -isystem D:/Qt/6.9.2/mingw_64/include/QtCore -isystem D:/Qt/6.9.2/mingw_64/include -isystem D:/Qt/6.9.2/mingw_64/mkspecs/win32-g++ -isystem D:/Qt/6.9.2/mingw_64/include/QtWidgets -isystem D:/Qt/6.9.2/mingw_64/include/QtGui
+  OBJECT_DIR = CMakeFiles\test1.dir
+  OBJECT_FILE_DIR = CMakeFiles\test1.dir
+
+build CMakeFiles/test1.dir/teacherview.cpp.obj: CXX_COMPILER__test1_unscanned_Debug D$:/project$ Qt/test1/teacherview.cpp || cmake_object_order_depends_target_test1
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NEEDS_QMAIN -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\test1.dir\teacherview.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -I"D:/project Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/include" -isystem D:/Qt/6.9.2/mingw_64/include/QtCore -isystem D:/Qt/6.9.2/mingw_64/include -isystem D:/Qt/6.9.2/mingw_64/mkspecs/win32-g++ -isystem D:/Qt/6.9.2/mingw_64/include/QtWidgets -isystem D:/Qt/6.9.2/mingw_64/include/QtGui
+  OBJECT_DIR = CMakeFiles\test1.dir
+  OBJECT_FILE_DIR = CMakeFiles\test1.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target test1
@@ -81,7 +121,7 @@ build CMakeFiles/test1.dir/mainwindow.cpp.obj: CXX_COMPILER__test1_unscanned_Deb
 #############################################
 # Link the executable test1.exe
 
-build test1.exe: CXX_EXECUTABLE_LINKER__test1_Debug CMakeFiles/test1.dir/test1_autogen/mocs_compilation.cpp.obj CMakeFiles/test1.dir/main.cpp.obj CMakeFiles/test1.dir/mainwindow.cpp.obj | D$:/Qt/6.9.2/mingw_64/lib/libQt6Widgets.a D$:/Qt/6.9.2/mingw_64/lib/libQt6Gui.a D$:/Qt/6.9.2/mingw_64/lib/libQt6Core.a D$:/Qt/6.9.2/mingw_64/lib/libQt6EntryPoint.a || test1_autogen test1_autogen_timestamp_deps
+build test1.exe: CXX_EXECUTABLE_LINKER__test1_Debug CMakeFiles/test1.dir/test1_autogen/mocs_compilation.cpp.obj CMakeFiles/test1.dir/main.cpp.obj CMakeFiles/test1.dir/mainwindow.cpp.obj CMakeFiles/test1.dir/datastore.cpp.obj CMakeFiles/test1.dir/logindialog.cpp.obj CMakeFiles/test1.dir/studentview.cpp.obj CMakeFiles/test1.dir/adminview.cpp.obj CMakeFiles/test1.dir/teacherview.cpp.obj | D$:/Qt/6.9.2/mingw_64/lib/libQt6Widgets.a D$:/Qt/6.9.2/mingw_64/lib/libQt6Gui.a D$:/Qt/6.9.2/mingw_64/lib/libQt6Core.a D$:/Qt/6.9.2/mingw_64/lib/libQt6EntryPoint.a || test1_autogen test1_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_FLAGS = -mwindows
   LINK_LIBRARIES = D:/Qt/6.9.2/mingw_64/lib/libQt6Widgets.a  D:/Qt/6.9.2/mingw_64/lib/libQt6Gui.a  D:/Qt/6.9.2/mingw_64/lib/libQt6Core.a  -lmpr  -luserenv  -lmingw32  D:/Qt/6.9.2/mingw_64/lib/libQt6EntryPoint.a  -lshell32  -ld3d11  -ldxgi  -ldxguid  -ld3d12  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32

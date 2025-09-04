@@ -347,11 +347,42 @@
 	"HEADERS" : 
 	[
 		[
+			"D:/project Qt/test1/adminview.h",
+			"MU",
+			"EWIEGA46WW/moc_adminview.cpp",
+			null
+		],
+		[
+			"D:/project Qt/test1/datastore.h",
+			"MU",
+			"EWIEGA46WW/moc_datastore.cpp",
+			null
+		],
+		[
+			"D:/project Qt/test1/logindialog.h",
+			"MU",
+			"EWIEGA46WW/moc_logindialog.cpp",
+			null
+		],
+		[
 			"D:/project Qt/test1/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
 			null
-		]
+		],
+		[
+			"D:/project Qt/test1/studentview.h",
+			"MU",
+			"EWIEGA46WW/moc_studentview.cpp",
+			null
+		],
+		[
+			"D:/project Qt/test1/teacherview.h",
+			"MU",
+			"EWIEGA46WW/moc_teacherview.cpp",
+			null
+		],
+		[ "D:/project Qt/test1/user.h", "MU", "EWIEGA46WW/moc_user.cpp", null ]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
 	"INCLUDE_DIR" : "D:/project Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/include",
@@ -424,8 +455,13 @@
 	"SETTINGS_FILE" : "D:/project Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/CMakeFiles/test1_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[ "D:/project Qt/test1/adminview.cpp", "MU", null ],
+		[ "D:/project Qt/test1/datastore.cpp", "MU", null ],
+		[ "D:/project Qt/test1/logindialog.cpp", "MU", null ],
 		[ "D:/project Qt/test1/main.cpp", "MU", null ],
-		[ "D:/project Qt/test1/mainwindow.cpp", "MU", null ]
+		[ "D:/project Qt/test1/mainwindow.cpp", "MU", null ],
+		[ "D:/project Qt/test1/studentview.cpp", "MU", null ],
+		[ "D:/project Qt/test1/teacherview.cpp", "MU", null ]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],
