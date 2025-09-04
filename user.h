@@ -7,11 +7,14 @@
 enum class Role { Student=0, Teacher=1, Admin=2 };
 
 struct User {
-    QString username;
-    QString passwordHash;
-    Role role = Role::Student;
     QString fullName;
-    QString classId; // класс ученика или учителя
+    QString username;
+    QString passwordHash; // для логина
+    Role role;
+    int classId;          // класс студента
+    QVector<Grade> grades; // оценки
+};
+
 
     QJsonObject toJson() const {
         return QJsonObject{

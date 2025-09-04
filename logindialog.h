@@ -1,43 +1,26 @@
-#ifndef LOGINDIALOG_H
-#define LOGINDIALOG_H
-
+#pragma once
 #include <QDialog>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QLabel>
 #include "datastore.h"
-
-class QStackedWidget;
-class QLineEdit;
-class QPushButton;
-class QComboBox;
 
 class LoginDialog : public QDialog {
     Q_OBJECT
 public:
-    LoginDialog(DataStore* store, QWidget* parent=nullptr);
-    User currentUser() const { return m_user; }
+    explicit LoginDialog(DataStore* store, QWidget* parent = nullptr);
+    User loggedUser() const { return m_user; }
 
 private slots:
-    void showWelcome();
-    void showRegister();
-    void showLogin();
     void tryLogin();
-    void registerUser();
 
 private:
     DataStore* m_store;
     User m_user;
 
-    QStackedWidget* m_stack;
-
-    // Login
-    QLineEdit* m_loginUserEdit;
-    QLineEdit* m_loginPassEdit;
-
-    // Register
-    QLineEdit* m_regUserEdit;
-    QLineEdit* m_regPassEdit;
-    QLineEdit* m_regFullNameEdit;
-    QLineEdit* m_regClassEdit;
-    QComboBox* m_regRoleBox;
+    QLineEdit* m_usernameEdit;
+    QLineEdit* m_passwordEdit;
+    QPushButton* m_loginBtn;
+    QLabel* m_statusLabel;
 };
-
-#endif

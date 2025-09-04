@@ -3,10 +3,11 @@
 #include <QTabWidget>
 #include <QStackedWidget>
 #include <QTableWidget>
+#include <QListWidget>
+#include <QVBoxLayout>
 #include "datastore.h"
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
     MainWindow(User u, DataStore* store, QWidget* parent = nullptr);
@@ -23,7 +24,6 @@ private:
 
     void showStudentMarksPage();
     void showStudentSchedulePage();
-    void refreshTeacherMarksPage();
 
     QTabWidget* m_tabs;
     QStackedWidget* m_studentStack;

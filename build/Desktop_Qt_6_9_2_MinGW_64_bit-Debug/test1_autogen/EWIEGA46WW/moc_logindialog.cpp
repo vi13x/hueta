@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 #include "../../../../logindialog.h"
+#include <QtGui/qtextcursor.h>
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -39,25 +40,13 @@ template <> constexpr inline auto LoginDialog::qt_create_metaobjectdata<qt_meta_
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "LoginDialog",
-        "showWelcome",
-        "",
-        "showRegister",
-        "showLogin",
         "tryLogin",
-        "registerUser"
+        ""
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'showWelcome'
-        QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'showRegister'
-        QtMocHelpers::SlotData<void()>(3, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'showLogin'
-        QtMocHelpers::SlotData<void()>(4, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'tryLogin'
-        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'registerUser'
-        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(1, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -81,11 +70,7 @@ void LoginDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     auto *_t = static_cast<LoginDialog *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->showWelcome(); break;
-        case 1: _t->showRegister(); break;
-        case 2: _t->showLogin(); break;
-        case 3: _t->tryLogin(); break;
-        case 4: _t->registerUser(); break;
+        case 0: _t->tryLogin(); break;
         default: ;
         }
     }
@@ -111,14 +96,14 @@ int LoginDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 1)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 1;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 1)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 5;
+        _id -= 1;
     }
     return _id;
 }

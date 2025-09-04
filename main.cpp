@@ -1,19 +1,22 @@
 #include <QApplication>
 #include "datastore.h"
-#include "logindialog.h"
 #include "mainwindow.h"
+#include "logindialog.h"
 
-int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
 
     DataStore store;
-    store.load();
+    store.load(); // загрузка данных, если есть
 
     LoginDialog login(&store);
-    if (login.exec() == QDialog::Accepted) {
-        MainWindow w(login.currentUser(), &store);
-        w.show();
-        return app.exec();
-    }
-    return 0;
+    if(login.exec() != QDialog::Accepted) return 0;
+
+    User currentUser = login.loggedUser();
+
+    MainWindow w(currentUser, &store);
+    w.show();
+
+    return a.exec();
 }

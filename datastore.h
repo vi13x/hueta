@@ -1,57 +1,63 @@
 #pragma once
+#include <QObject>
 #include <QString>
+#include <QList>
 #include <QVector>
+#include <QDate>
 #include <QStringList>
+#include <QSet>
+#include <QRandomGenerator>
 
 enum class Role { Student, Teacher, Admin };
 
 struct Grade {
     QString subject;
-    int grade;
+    int mark;
     QString comment;
+    QDate date;
 };
 
 struct User {
     QString fullName;
     QString username;
+    QString passwordHash;
     Role role;
-    int classNumber;     // номер класса
-    QString classLetter; // буква класса
-    QVector<Grade> grades;
+    int classId;           // номер класса
+    QVector<Grade> grades; // оценки
 };
 
-class DataStore {
+class DataStore : public QObject {
+    Q_OBJECT
 public:
-    QVector<User> m_users;
+    explicit DataStore(QObject* parent = nullptr);
 
-    QVector<User>& allUsers() { return m_users; }
+    bool load();
+    bool save() const;
 
-    void addUser(const User& u) { m_users.append(u); }
-    void deleteUser(const QString& username) {
-        for(int i=0;i<m_users.size();i++){
-            if(m_users[i].username==username) { m_users.remove(i); return; }
-        }
-    }
+    bool addUser(const User&);
+    bool removeUser(const QString&);
+    bool userExists(const QString&) const;
+    User getUser(const QString&) const;
+    QList<User> allUsers() const;
 
-    QStringList allClasses() const {
-        QStringList classes;
-        for(auto& u : m_users){
-            if(u.role==Role::Student){
-                QString c = QString::number(u.classNumber) + u.classLetter;
-                if(!classes.contains(c)) classes.append(c);
-            }
-        }
-        return classes;
-    }
+    QString hash(const QString&);
+    bool verify(const QString& username, const QString& password, User* u = nullptr) const;
 
-    QStringList studentsInClass(const QString& className) const {
-        QStringList list;
-        for(auto& u : m_users){
-            if(u.role==Role::Student){
-                QString c = QString::number(u.classNumber)+u.classLetter;
-                if(c==className) list.append(u.fullName);
-            }
-        }
-        return list;
-    }
+    void addMark(const QString& username, const QString& subject, int mark, const QDate& date);
+    int getMarks(const QString& username) const;
+
+    void setAbsent(const QString&, const QDate&, bool);
+    bool isAbsent(const QString&, const QDate&) const;
+
+    QStringList getSchedule(int classId) const;
+    void setSchedule(int classId, const QStringList& schedule);
+
+    QStringList allClasses() const;
+    QStringList studentsInClass(const QString& className) const;
+
+signals:
+    void changed();
+
+private:
+    QList<User> m_users;
 };

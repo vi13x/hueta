@@ -1,5 +1,10 @@
 D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/EWIEGA46WW/moc_teacherview.cpp: D:/project\ Qt/test1/teacherview.h \
   D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/moc_predefs.h \
+  D:/Qt/6.9.2/mingw_64/include/QtCore/QDate \
+  D:/Qt/6.9.2/mingw_64/include/QtCore/QList \
+  D:/Qt/6.9.2/mingw_64/include/QtCore/QObject \
+  D:/Qt/6.9.2/mingw_64/include/QtCore/QRandomGenerator \
+  D:/Qt/6.9.2/mingw_64/include/QtCore/QSet \
   D:/Qt/6.9.2/mingw_64/include/QtCore/QString \
   D:/Qt/6.9.2/mingw_64/include/QtCore/QStringList \
   D:/Qt/6.9.2/mingw_64/include/QtCore/QVector \
@@ -24,6 +29,7 @@ D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/EWI
   D:/Qt/6.9.2/mingw_64/include/QtCore/qbytearrayalgorithms.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qbytearraylist.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qbytearrayview.h \
+  D:/Qt/6.9.2/mingw_64/include/QtCore/qcalendar.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qchar.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qcompare.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qcompare_impl.h \
@@ -37,6 +43,7 @@ D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/EWI
   D:/Qt/6.9.2/mingw_64/include/QtCore/qcontiguouscache.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qdarwinhelpers.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qdatastream.h \
+  D:/Qt/6.9.2/mingw_64/include/QtCore/qdatetime.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qdebug.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qendian.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qexceptionhandling.h \
@@ -56,6 +63,7 @@ D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/EWI
   D:/Qt/6.9.2/mingw_64/include/QtCore/qlatin1stringview.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qline.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qlist.h \
+  D:/Qt/6.9.2/mingw_64/include/QtCore/qlocale.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qlogging.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qmalloc.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qmap.h \
@@ -74,6 +82,7 @@ D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/EWI
   D:/Qt/6.9.2/mingw_64/include/QtCore/qpair.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qpoint.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qprocessordetection.h \
+  D:/Qt/6.9.2/mingw_64/include/QtCore/qrandom.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qrect.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qrefcount.h \
   D:/Qt/6.9.2/mingw_64/include/QtCore/qscopedpointer.h \
@@ -210,6 +219,8 @@ D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/EWI
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/postypes.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/predefined_ops.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/ptr_traits.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/random.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/random.tcc \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/range_access.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/refwrap.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
@@ -295,6 +306,7 @@ D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/EWI
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_memory_defs.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_numeric_defs.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/pstl_config.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/random \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ratio \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/set \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/stdexcept \
@@ -332,13 +344,20 @@ D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/EWI
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/error_constants.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/gthr-default.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/gthr.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/opt_random.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/os_defines.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/emmintrin.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/limits.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mmintrin.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mwaitintrin.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/pmmintrin.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdarg.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdbool.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
   D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/syslimits.h \
+  D:/Qt/Tools/mingw1310_64/lib/gcc/x86_64-w64-mingw32/13.1.0/include/xmmintrin.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw_mac.h \
   D:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/_mingw_off_t.h \
