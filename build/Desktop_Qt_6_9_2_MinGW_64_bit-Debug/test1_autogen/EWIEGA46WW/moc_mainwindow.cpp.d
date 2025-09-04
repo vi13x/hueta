@@ -177,6 +177,7 @@ D:/project\ Qt/test1/build/Desktop_Qt_6_9_2_MinGW_64_bit-Debug/test1_autogen/EWI
   D:/Qt/6.9.2/mingw_64/include/QtGui/qwindowdefs.h \
   D:/Qt/6.9.2/mingw_64/include/QtGui/qwindowdefs_win.h \
   D:/Qt/6.9.2/mingw_64/include/QtWidgets/QMainWindow \
+  D:/Qt/6.9.2/mingw_64/include/QtWidgets/QTabWidget \
   D:/Qt/6.9.2/mingw_64/include/QtWidgets/qmainwindow.h \
   D:/Qt/6.9.2/mingw_64/include/QtWidgets/qsizepolicy.h \
   D:/Qt/6.9.2/mingw_64/include/QtWidgets/qtabwidget.h \

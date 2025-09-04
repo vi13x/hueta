@@ -4,13 +4,8 @@
 #include <QLabel>
 #include <QTableWidget>
 #include <QHeaderView>
-#include <QtCharts/QChartView>
-#include <QtCharts/QLineSeries>
-#include <QtCharts/QCategoryAxis>
 #include <QPushButton>
 #include <QListWidget>
-
-using namespace QtCharts;
 
 MainWindow::MainWindow(const User& u, DataStore* store, QWidget* parent)
     : QMainWindow(parent), m_user(u), m_store(store)
@@ -33,7 +28,8 @@ MainWindow::MainWindow(const User& u, DataStore* store, QWidget* parent)
 }
 
 void MainWindow::setupStudentUI() {
-    m_tabs->addTab(createStudentStatsPage(), "📊 Статистика");
+    // Пока убрал статистику, оставим только расписание
+    // Можно добавить другие вкладки студента позже
 }
 
 void MainWindow::setupTeacherUI() {
@@ -60,7 +56,6 @@ QWidget* MainWindow::createSchedulePage() {
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     table->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    // Примерное расписание
     QString lessons[6][5] = {
         {"Математика","Русский","История","Английский","Физика"},
         {"Физ-ра","География","Химия","Литература","Информатика"},
@@ -70,50 +65,11 @@ QWidget* MainWindow::createSchedulePage() {
         {"Химия","Математика","Физ-ра","Русский","Литература"}
     };
 
-    for (int r=0; r<6; r++) {
-        for (int c=0; c<5; c++) {
+    for (int r=0; r<6; r++)
+        for (int c=0; c<5; c++)
             table->setItem(r,c,new QTableWidgetItem(lessons[r][c]));
-        }
-    }
 
     layout->addWidget(table);
-    return w;
-}
-
-QWidget* MainWindow::createStudentStatsPage() {
-    QWidget* w = new QWidget(this);
-    auto layout = new QVBoxLayout(w);
-
-    QLabel* title = new QLabel("Моя успеваемость", w);
-    title->setStyleSheet("font-size:16px; font-weight:bold;");
-    layout->addWidget(title);
-
-    QLineSeries* series = new QLineSeries();
-    series->append(1, 7);
-    series->append(2, 8);
-    series->append(3, 6);
-    series->append(4, 9);
-    series->append(5, 10);
-
-    QChart* chart = new QChart();
-    chart->addSeries(series);
-    chart->setTitle("Средний балл по четвертям");
-
-    QCategoryAxis* axisX = new QCategoryAxis();
-    axisX->append("I", 1);
-    axisX->append("II", 2);
-    axisX->append("III", 3);
-    axisX->append("IV", 4);
-    chart->setAxisX(axisX, series);
-
-    QCategoryAxis* axisY = new QCategoryAxis();
-    for (int i=1;i<=10;i++) axisY->append(QString::number(i), i);
-    chart->setAxisY(axisY, series);
-
-    QChartView* chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-    layout->addWidget(chartView);
-
     return w;
 }
 
@@ -155,9 +111,8 @@ QWidget* MainWindow::createAdminPage() {
     layout->addWidget(label);
 
     QListWidget* users = new QListWidget(w);
-    for (auto& u : m_store->allUsers()) {
+    for (auto& u : m_store->allUsers())
         users->addItem(u.fullName + " (" + u.username + ")");
-    }
     layout->addWidget(users);
 
     QPushButton* addBtn = new QPushButton("Добавить пользователя", w);

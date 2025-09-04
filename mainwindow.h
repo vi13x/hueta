@@ -1,24 +1,15 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
+#pragma once
 #include <QMainWindow>
-#include "user.h"
-#include "datastore.h"
+#include <QTabWidget>
+#include "datastore.h" // твоя структура User, DataStore, Role
 
-class QTabWidget;
-class QTableWidget;
-class QChartView;
-
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 public:
-    MainWindow(const User& u, DataStore* store, QWidget* parent=nullptr);
+    MainWindow(const User& u, DataStore* store, QWidget* parent = nullptr);
 
 private:
-    User m_user;
-    DataStore* m_store;
-    QTabWidget* m_tabs;
-
     void setupStudentUI();
     void setupTeacherUI();
     void setupAdminUI();
@@ -26,6 +17,8 @@ private:
     QWidget* createSchedulePage();
     QWidget* createTeacherMarksPage();
     QWidget* createAdminPage();
-};
 
-#endif
+    QTabWidget* m_tabs;
+    User m_user;
+    DataStore* m_store;
+};

@@ -177,6 +177,7 @@ test1_autogen/timestamp: \
 	D:/Qt/6.9.2/mingw_64/include/QtGui/qwindowdefs_win.h \
 	D:/Qt/6.9.2/mingw_64/include/QtWidgets/QDialog \
 	D:/Qt/6.9.2/mingw_64/include/QtWidgets/QMainWindow \
+	D:/Qt/6.9.2/mingw_64/include/QtWidgets/QTabWidget \
 	D:/Qt/6.9.2/mingw_64/include/QtWidgets/QWidget \
 	D:/Qt/6.9.2/mingw_64/include/QtWidgets/qdialog.h \
 	D:/Qt/6.9.2/mingw_64/include/QtWidgets/qmainwindow.h \
