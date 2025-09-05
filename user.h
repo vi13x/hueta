@@ -4,5 +4,6 @@
 struct User {
     QString username;
     QString password;
-    QString role; // "student", "teacher", "admin"
+    QString role; 
 };
+
