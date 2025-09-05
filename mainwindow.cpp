@@ -1,126 +1,81 @@
 #include "mainwindow.h"
+#include "registrationdialog.h"
+#include "logindialog.h"
+#include "studentview.h"
+#include "teacherview.h"
+#include "adminview.h"
 #include <QVBoxLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QTableWidgetItem>
-#include <QHeaderView>
-#include <QRandomGenerator>
+#include <QWidget>
+#include <QMessageBox>
 
-MainWindow::MainWindow(User u, DataStore* store, QWidget* parent)
-    : QMainWindow(parent), m_user(u), m_store(store)
-{
-    setWindowTitle("Электронный дневник - " + u.fullName);
-    resize(900,600);
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+    setWindowTitle("SchoolApp — приветствие");
+    resize(600, 400);
 
-    m_tabs = new QTabWidget(this);
-    setCentralWidget(m_tabs);
+    QWidget *central = new QWidget(this);
+    setCentralWidget(central);
+    QVBoxLayout *lay = new QVBoxLayout(central);
 
-    if(u.role==Role::Student) setupStudentUI();
-    else if(u.role==Role::Teacher) setupTeacherUI();
-    else if(u.role==Role::Admin) setupAdminUI();
+    welcomeLabel = new QLabel("<h1>иди нахуй далбаеб</h1>\nПожалуйста, зарегистрируйтесь или войдите.", this);
+    welcomeLabel->setAlignment(Qt::AlignCenter);
+    lay->addWidget(welcomeLabel);
+
+    regBtn = new QPushButton("Регистрация (ученик)", this);
+    loginBtn = new QPushButton("Войти (ученик)", this);
+    teacherAdminBtn = new QPushButton("Вход для учителя / администратора", this);
+
+    lay->addWidget(regBtn);
+    lay->addWidget(loginBtn);
+    lay->addWidget(teacherAdminBtn);
+    lay->addStretch();
+
+    connect(regBtn, &QPushButton::clicked, this, &MainWindow::onRegister);
+    connect(loginBtn, &QPushButton::clicked, this, &MainWindow::onLogin);
+    connect(teacherAdminBtn, &QPushButton::clicked, this, &MainWindow::onTeacherAdminLogin);
 }
 
-// --- Student ---
-void MainWindow::setupStudentUI(){
-    m_studentStack = new QStackedWidget();
-    QWidget* schedulePage = createStudentPage();
-    QWidget* marksPage = createStudentMarksPage();
-    m_studentStack->addWidget(schedulePage);
-    m_studentStack->addWidget(marksPage);
-
-    QPushButton* toMarks = new QPushButton("📊 Мои оценки", schedulePage);
-    schedulePage->layout()->addWidget(toMarks);
-    connect(toMarks, &QPushButton::clicked, this, &MainWindow::showStudentMarksPage);
-
-    QPushButton* back = new QPushButton("⬅ Назад", marksPage);
-    marksPage->layout()->addWidget(back);
-    connect(back, &QPushButton::clicked, this, &MainWindow::showStudentSchedulePage);
-
-    QPushButton* logout = new QPushButton("Выйти", schedulePage);
-    schedulePage->layout()->addWidget(logout);
-    connect(logout, &QPushButton::clicked, [this](){ close(); });
-
-    m_tabs->addTab(m_studentStack, "👨‍🎓 Личный кабинет");
-}
-
-void MainWindow::showStudentMarksPage(){ if(m_studentStack) m_studentStack->setCurrentIndex(1); }
-void MainWindow::showStudentSchedulePage(){ if(m_studentStack) m_studentStack->setCurrentIndex(0); }
-
-QWidget* MainWindow::createStudentPage(){
-    QWidget* w = new QWidget();
-    QVBoxLayout* layout = new QVBoxLayout(w);
-    QLabel* info = new QLabel(QString("ФИО: %1\nКласс: %2")
-                                  .arg(m_user.fullName).arg(m_user.classId), w);
-    layout->addWidget(info);
-    return w;
-}
-
-QWidget* MainWindow::createStudentMarksPage(){
-    QWidget* w = new QWidget();
-    QVBoxLayout* layout = new QVBoxLayout(w);
-    QTableWidget* marks = new QTableWidget(0,3,w);
-    marks->setHorizontalHeaderLabels({"Предмет","Оценка","Комментарий"});
-    marks->verticalHeader()->hide();
-    marks->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    for(auto& g : m_user.grades){
-        int r = marks->rowCount();
-        marks->insertRow(r);
-        marks->setItem(r,0,new QTableWidgetItem(g.subject));
-        marks->setItem(r,1,new QTableWidgetItem(QString::number(g.mark)));
-        marks->setItem(r,2,new QTableWidgetItem(g.comment));
-    }
-    layout->addWidget(marks);
-    return w;
-}
-
-// --- Teacher ---
-void MainWindow::setupTeacherUI(){ m_tabs->addTab(createTeacherMarksPage(), "✍ Оценки"); }
-
-QWidget* MainWindow::createTeacherMarksPage(){
-    QWidget* w = new QWidget();
-    QVBoxLayout* layout = new QVBoxLayout(w);
-
-    m_classList = new QListWidget(w);
-    for(auto c : m_store->allClasses()) m_classList->addItem(c);
-    layout->addWidget(m_classList);
-
-    m_teacherMarksTable = new QTableWidget(0,5,w);
-    m_teacherMarksTable->setHorizontalHeaderLabels({"Ученик","Оценка","Пропуск","Комментарий","Дата"});
-    m_teacherMarksTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    layout->addWidget(m_teacherMarksTable);
-
-    connect(m_classList, &QListWidget::currentTextChanged, [=](const QString &className){
-        m_teacherMarksTable->clearContents();
-        m_teacherMarksTable->setRowCount(0);
-
-        QStringList students = m_store->studentsInClass(className);
-        for(int i=0; i<students.size(); i++){
-            m_teacherMarksTable->insertRow(i);
-            m_teacherMarksTable->setItem(i,0,new QTableWidgetItem(students[i]));
+void MainWindow::onRegister() {
+    RegistrationDialog dlg(this);
+    if (dlg.exec() == QDialog::Accepted) {
+        User u = dlg.user();
+        if (ds.addStudent(u)) {
+            QMessageBox::information(this, "OK", "Регистрация прошла успешно. Теперь войдите.");
+        } else {
+            QMessageBox::warning(this, "Ошибка", "Пользователь с таким именем уже существует.");
         }
-    });
-
-    return w;
+    }
 }
 
-// --- Admin ---
-void MainWindow::setupAdminUI(){ m_tabs->addTab(createAdminPage(), "⚙ Администрирование"); }
+void MainWindow::onLogin() {
+    LoginDialog dlg(LoginDialog::Role::Student, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        QString username = dlg.username();
+        QString password = dlg.password();
+        if (ds.checkStudentCredentials(username, password)) {
+            StudentView *sv = new StudentView(username);
+            sv->setAttribute(Qt::WA_DeleteOnClose);
+            sv->show();
+        } else {
+            QMessageBox::warning(this, "Ошибка", "Неверные учётные данные ученика.");
+        }
+    }
+}
 
-QWidget* MainWindow::createAdminPage(){
-    QWidget* w = new QWidget();
-    QVBoxLayout* layout = new QVBoxLayout(w);
-
-    QPushButton* addBtn = new QPushButton("Добавить нового студента", w);
-    layout->addWidget(addBtn);
-
-    connect(addBtn, &QPushButton::clicked, [=](){
-        User u;
-        u.fullName = "Новый студент";
-        u.username = "user" + QString::number(QRandomGenerator::global()->bounded(1000));
-        u.role = Role::Student;
-        u.classId = 1;
-        m_store->addUser(u);
-    });
-
-    return w;
+void MainWindow::onTeacherAdminLogin() {
+    LoginDialog dlg(LoginDialog::Role::TeacherOrAdmin, this);
+    if (dlg.exec() == QDialog::Accepted) {
+        QString username = dlg.username();
+        QString password = dlg.password();
+        if (ds.checkTeacherCredentials(username, password)) {
+            TeacherView *tv = new TeacherView(username);
+            tv->setAttribute(Qt::WA_DeleteOnClose);
+            tv->show();
+        } else if (ds.checkAdminCredentials(username, password)) {
+            AdminView *av = new AdminView(username);
+            av->setAttribute(Qt::WA_DeleteOnClose);
+            av->show();
+        } else {
+            QMessageBox::warning(this, "Ошибка", "Неверные учётные данные (учитель/админ).");
+        }
+    }
 }

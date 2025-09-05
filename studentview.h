@@ -1,22 +1,21 @@
-#ifndef STUDENTVIEW_H
-#define STUDENTVIEW_H
-
+#pragma once
 #include <QWidget>
-#include "datastore.h"
+#include <QString>
 
-class QTableWidget;
+class QListWidget;
+class QTabWidget;
+class QPushButton;
 
 class StudentView : public QWidget {
     Q_OBJECT
 public:
-    StudentView(const User& u, DataStore* store, QWidget* parent=nullptr);
-
+    StudentView(const QString &username, QWidget *parent = nullptr);
+private slots:
+    void onLogout();
+    void onBack();
 private:
-    void refresh();
-
-    User m_user;
-    DataStore* m_store;
-    QTableWidget* m_table;
+    QString username;
+    QTabWidget *tabs;
+    QPushButton *logoutBtn;
+    QPushButton *backBtn;
 };
-
-#endif

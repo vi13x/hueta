@@ -1,28 +1,28 @@
-#ifndef ADMINVIEW_H
-#define ADMINVIEW_H
-
+#pragma once
 #include <QWidget>
-#include "datastore.h"
+#include <QString>
 
-class QTableWidget;
 class QPushButton;
-class QLineEdit;
+class QListWidget;
+class QTextEdit;
 
 class AdminView : public QWidget {
     Q_OBJECT
 public:
-    AdminView(DataStore* store, QWidget* parent=nullptr);
-
+    AdminView(const QString &username, QWidget *parent = nullptr);
 private slots:
-    void refresh();
-    void removeUser();
-    void editSchedule();
-
+    void onLogout();
+    void onAddTeacher();
+    void onRemoveTeacher();
+    void onAddAdmin();
+    void onRemoveAdmin();
+    void onLoadSchedule();
+    void onSaveSchedule();
+    void onViewGrades();
+    void onClearGrades();
 private:
-    DataStore* m_store;
-    QTableWidget* m_table;
-    QPushButton* m_removeBtn;
-    QPushButton* m_scheduleBtn;
+    QString username;
+    QListWidget *teachersList;
+    QListWidget *adminsList;
+    QTextEdit *scheduleEdit;
 };
-
-#endif

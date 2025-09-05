@@ -1,35 +1,21 @@
 #pragma once
 #include <QMainWindow>
-#include <QTabWidget>
-#include <QStackedWidget>
-#include <QTableWidget>
-#include <QListWidget>
-#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
 #include "datastore.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
-    MainWindow(User u, DataStore* store, QWidget* parent = nullptr);
-
+    MainWindow(QWidget *parent = nullptr);
+private slots:
+    void onRegister();
+    void onLogin();
+    void onTeacherAdminLogin();
 private:
-    void setupStudentUI();
-    void setupTeacherUI();
-    void setupAdminUI();
-
-    QWidget* createStudentPage();
-    QWidget* createStudentMarksPage();
-    QWidget* createTeacherMarksPage();
-    QWidget* createAdminPage();
-
-    void showStudentMarksPage();
-    void showStudentSchedulePage();
-
-    QTabWidget* m_tabs;
-    QStackedWidget* m_studentStack;
-    QTableWidget* m_teacherMarksTable;
-    QListWidget* m_classList;
-
-    User m_user;
-    DataStore* m_store;
+    DataStore ds;
+    QLabel *welcomeLabel;
+    QPushButton *regBtn;
+    QPushButton *loginBtn;
+    QPushButton *teacherAdminBtn;
 };

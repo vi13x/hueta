@@ -1,33 +1,50 @@
 #include "studentview.h"
 #include <QVBoxLayout>
-#include <QTableWidget>
-#include <QHeaderView>
 #include <QLabel>
+#include <QTabWidget>
+#include <QListWidget>
+#include <QPushButton>
 
-StudentView::StudentView(const User& u, DataStore* store, QWidget* parent)
-    : QWidget(parent), m_user(u), m_store(store)
-{
-    auto layout = new QVBoxLayout(this);
+StudentView::StudentView(const QString &username, QWidget *parent) : QWidget(parent), username(username) {
+    setWindowTitle(QString("Студент: %1").arg(username));
+    resize(600, 400);
+    QVBoxLayout *v = new QVBoxLayout(this);
+    QLabel *userLbl = new QLabel(QString("<b>Вы вошли как:</b> %1").arg(username), this);
+    v->addWidget(userLbl);
 
-    layout->addWidget(new QLabel("Оценки и статистика (1-10): " + u.fullName, this));
+    tabs = new QTabWidget(this);
 
-    m_table = new QTableWidget(this);
-    m_table->setColumnCount(3);
-    m_table->setHorizontalHeaderLabels({"Предмет", "Оценка", "Дата"});
-    m_table->horizontalHeader()->setStretchLastSection(true);
-    layout->addWidget(m_table);
+    // Расписание
+    QListWidget *scheduleList = new QListWidget(this);
+    scheduleList->addItem("Понедельник: Математика, Русский");
+    scheduleList->addItem("Вторник: Физика, История");
+    scheduleList->addItem("Среда: Литература");
+    tabs->addTab(scheduleList, "Расписание");
 
-    refresh();
+    // Успеваемость
+    QListWidget *gradesList = new QListWidget(this);
+    gradesList->addItem("Математика — 8");
+    gradesList->addItem("Русский — 9");
+    tabs->addTab(gradesList, "Успеваемость");
 
-    connect(m_store, &DataStore::changed, this, &StudentView::refresh);
+    v->addWidget(tabs);
+
+    QHBoxLayout *h = new QHBoxLayout();
+    backBtn = new QPushButton("Назад", this);
+    logoutBtn = new QPushButton("Выйти из аккаунта", this);
+    h->addWidget(backBtn);
+    h->addWidget(logoutBtn);
+    v->addLayout(h);
+
+    connect(logoutBtn, &QPushButton::clicked, this, &StudentView::onLogout);
+    connect(backBtn, &QPushButton::clicked, this, &StudentView::onBack);
 }
 
-void StudentView::refresh() {
-    auto marks = m_store->getMarks(m_user.username);
-    m_table->setRowCount(marks.size());
-    for (int i=0; i<marks.size(); ++i) {
-        m_table->setItem(i, 0, new QTableWidgetItem(marks[i].subject));
-        m_table->setItem(i, 1, new QTableWidgetItem(QString::number(marks[i].value)));
-        m_table->setItem(i, 2, new QTableWidgetItem(marks[i].date.toString("dd.MM.yyyy")));
-    }
+void StudentView::onLogout() {
+    close();
+}
+
+void StudentView::onBack() {
+    // просто закрываем — пользователь вернётся к главному окну
+    close();
 }

@@ -1,63 +1,42 @@
 #pragma once
-#include <QObject>
+#include "user.h"
 #include <QString>
-#include <QList>
 #include <QVector>
-#include <QDate>
-#include <QStringList>
-#include <QSet>
-#include <QRandomGenerator>
+#include <QMap>
 
-enum class Role { Student, Teacher, Admin };
-
-struct Grade {
-    QString subject;
-    int mark;
-    QString comment;
-    QDate date;
-};
-
-struct User {
-    QString fullName;
-    QString username;
-    QString passwordHash;
-    Role role;
-    int classId;           // номер класса
-    QVector<Grade> grades; // оценки
-};
-
-class DataStore : public QObject {
-    Q_OBJECT
+class DataStore {
 public:
-    explicit DataStore(QObject* parent = nullptr);
+    DataStore();
 
-    bool load();
-    bool save() const;
+    // users
+    QVector<User> loadStudents();
+    bool addStudent(const User &u);
+    bool checkStudentCredentials(const QString &username, const QString &password);
 
-    bool addUser(const User&);
-    bool removeUser(const QString&);
-    bool userExists(const QString&) const;
-    User getUser(const QString&) const;
-    QList<User> allUsers() const;
+    bool checkTeacherCredentials(const QString &username, const QString &password);
+    bool checkAdminCredentials(const QString &username, const QString &password);
 
-    QString hash(const QString&);
-    bool verify(const QString& username, const QString& password, User* u = nullptr) const;
+    // teacher/admin files are plain: username:password per line
+    bool addTeacher(const QString &username, const QString &password);
+    bool removeTeacher(const QString &username);
 
-    void addMark(const QString& username, const QString& subject, int mark, const QDate& date);
-    int getMarks(const QString& username) const;
+    bool addAdmin(const QString &username, const QString &password);
+    bool removeAdmin(const QString &username);
 
-    void setAbsent(const QString&, const QDate&, bool);
-    bool isAbsent(const QString&, const QDate&) const;
+    // schedule
+    QVector<QString> loadSchedule();
+    bool saveSchedule(const QVector<QString> &lines);
 
-    QStringList getSchedule(int classId) const;
-    void setSchedule(int classId, const QStringList& schedule);
-
-    QStringList allClasses() const;
-    QStringList studentsInClass(const QString& className) const;
-
-signals:
-    void changed();
+    // grades
+    // grades file format: class|student|subject|date|grade
+    QVector<QString> loadGrades();
+    bool addGrade(const QString &className, const QString &student, const QString &subject, const QString &date, const QString &grade);
+    bool overwriteGrades(const QVector<QString> &lines);
 
 private:
-    QList<User> m_users;
+    QString studentsFile();
+    QString teachersFile();
+    QString adminsFile();
+    QString scheduleFile();
+    QString gradesFile();
 };
