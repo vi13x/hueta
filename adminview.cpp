@@ -139,8 +139,10 @@ AdminView::AdminView(const QString &username, QWidget *parent) : QWidget(parent)
     QHBoxLayout *scheduleButtons = new QHBoxLayout();
     QPushButton *loadS = new QPushButton("ЗАГРУЗИТЬ (ОБНОВИТЬ)", this);
     QPushButton *saveS = new QPushButton("СОХРАНИТЬ РАСПИСАНИЕ", this);
+    QPushButton *generateS = new QPushButton("СГЕНЕРИРОВАТЬ БАЗОВОЕ РАСПИСАНИЕ", this);
     scheduleButtons->addWidget(loadS);
     scheduleButtons->addWidget(saveS);
+    scheduleButtons->addWidget(generateS);
     scheduleLayout->addLayout(scheduleButtons);
 
     mainTabs->addTab(scheduleTab, "РАСПИСАНИЕ");
@@ -169,6 +171,7 @@ AdminView::AdminView(const QString &username, QWidget *parent) : QWidget(parent)
     connect(remA, &QPushButton::clicked, this, &AdminView::onRemoveAdmin);
     connect(loadS, &QPushButton::clicked, this, &AdminView::onLoadSchedule);
     connect(saveS, &QPushButton::clicked, this, &AdminView::onSaveSchedule);
+    connect(generateS, &QPushButton::clicked, this, &AdminView::onGenerateSchedule);
     connect(viewGradesBtn, &QPushButton::clicked, this, &AdminView::onViewGrades);
     connect(clearGradesBtn, &QPushButton::clicked, this, &AdminView::onClearGrades);
     connect(logoutBtn, &QPushButton::clicked, this, &AdminView::onLogout);
@@ -227,6 +230,13 @@ void AdminView::onSaveSchedule() {
     DataStore ds;
     if (ds.saveSchedule(lines)) QMessageBox::information(this, "OK", "Расписание сохранено.");
     else QMessageBox::warning(this, "Ошибка", "Не удалось сохранить расписание.");
+}
+
+void AdminView::onGenerateSchedule() {
+    DataStore ds;
+    ds.generateDefaultSchedule();
+    onLoadSchedule(); // Обновляем отображение
+    QMessageBox::information(this, "УСПЕШНО", "Базовое расписание сгенерировано и загружено.");
 }
 
 void AdminView::onViewGrades() {

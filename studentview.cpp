@@ -72,6 +72,13 @@ StudentView::StudentView(const QString &username, QWidget *parent) : QWidget(par
     // Загружаем расписание из DataStore
     DataStore ds;
     auto scheduleLines = ds.loadSchedule();
+    
+    // Если расписание пустое, генерируем базовое
+    if (scheduleLines.isEmpty()) {
+        ds.generateDefaultSchedule();
+        scheduleLines = ds.loadSchedule();
+    }
+    
     QStringList days = {"Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"};
     
     for (int i = 0; i < 7; ++i) {
@@ -82,7 +89,12 @@ StudentView::StudentView(const QString &username, QWidget *parent) : QWidget(par
         
         QString subjects = "Выходной";
         if (i < scheduleLines.size() && !scheduleLines[i].isEmpty()) {
-            subjects = scheduleLines[i];
+            // Извлекаем только предметы из строки расписания
+            QString line = scheduleLines[i];
+            int colonPos = line.indexOf(':');
+            if (colonPos != -1) {
+                subjects = line.mid(colonPos + 1).trimmed();
+            }
         }
         QTableWidgetItem *subjectItem = new QTableWidgetItem(subjects);
         subjectItem->setFlags(subjectItem->flags() & ~Qt::ItemIsEditable);

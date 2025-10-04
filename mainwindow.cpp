@@ -44,8 +44,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     
     // Основной layout
     QVBoxLayout *mainLayout = new QVBoxLayout(central);
-    mainLayout->setSpacing(30);
-    mainLayout->setContentsMargins(50, 50, 50, 50);
+    mainLayout->setSpacing(20);
+    mainLayout->setContentsMargins(30, 30, 30, 30);
 
     // Заголовок в брутальном стиле
     QFrame *headerFrame = new QFrame(this);
@@ -57,11 +57,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     
     welcomeLabel = new QLabel("ЭЛЕКТРОННЫЙ ЖУРНАЛ", this);
     welcomeLabel->setAlignment(Qt::AlignCenter);
-    welcomeLabel->setStyleSheet("QLabel { color: white; font-size: 32px; font-weight: bold; margin: 10px; letter-spacing: 2px; }");
+    welcomeLabel->setStyleSheet("QLabel { color: white; font-size: 28px; font-weight: bold; margin: 5px; letter-spacing: 1px; }");
     
-    QLabel *subtitleLabel = new QLabel("Выберите действие для продолжения", this);
+    QLabel *subtitleLabel = new QLabel("ДОБРО ПОЖАЛОВАТЬ В СИСТЕМУ УПРАВЛЕНИЯ ОБРАЗОВАНИЕМ", this);
     subtitleLabel->setAlignment(Qt::AlignCenter);
-    subtitleLabel->setStyleSheet("QLabel { color: #b0b0b0; font-size: 16px; margin: 5px; }");
+    subtitleLabel->setStyleSheet("QLabel { color: #b0b0b0; font-size: 14px; margin: 5px; }");
     
     headerLayout->addWidget(welcomeLabel);
     headerLayout->addWidget(subtitleLabel);

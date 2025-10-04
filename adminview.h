@@ -19,6 +19,7 @@ private slots:
     void onRemoveAdmin();
     void onLoadSchedule();
     void onSaveSchedule();
+    void onGenerateSchedule();
     void onViewGrades();
     void onClearGrades();
 private:

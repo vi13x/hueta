@@ -33,10 +33,22 @@ public:
     bool addGrade(const QString &className, const QString &student, const QString &subject, const QString &date, const QString &grade);
     bool overwriteGrades(const QVector<QString> &lines);
 
+    // classes and students management
+    QVector<QString> getClasses();
+    QVector<QString> getStudentsForClass(const QString &className);
+    bool addStudentToClass(const QString &className, const QString &studentName);
+    bool removeStudentFromClass(const QString &className, const QString &studentName);
+    
+    // schedule generation
+    void generateDefaultSchedule();
+    QVector<QString> getSubjects();
+    QVector<QString> getTeachers();
+
 private:
     QString studentsFile();
     QString teachersFile();
     QString adminsFile();
     QString scheduleFile();
     QString gradesFile();
+    QString classesFile();
 };

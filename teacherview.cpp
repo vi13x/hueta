@@ -68,12 +68,12 @@ TeacherView::TeacherView(const QString &username, QWidget *parent) : QWidget(par
     leftLayout->addWidget(classesLabel);
     
     classList = new QListWidget(this);
-    classList->addItem("1A");
-    classList->addItem("1B");
-    classList->addItem("2A");
-    classList->addItem("2B");
-    classList->addItem("3A");
-    classList->addItem("3B");
+    // Загружаем классы из DataStore
+    DataStore ds;
+    auto classes = ds.getClasses();
+    for (const QString &cls : classes) {
+        classList->addItem(cls);
+    }
     leftLayout->addWidget(classList);
     
     QLabel *studentsLabel = new QLabel("СТУДЕНТЫ:", this);
@@ -133,30 +133,11 @@ void TeacherView::onClassSelected() {
     studentList->clear();
     gradeBtn->setEnabled(false);
     
-    // Загружаем студентов для выбранного класса
-    if (cls == "1A") {
-        studentList->addItem("Иванов Иван");
-        studentList->addItem("Петров Петр");
-        studentList->addItem("Сидоров Сидор");
-        studentList->addItem("Козлова Анна");
-    } else if (cls == "1B") {
-        studentList->addItem("Анна Смирнова");
-        studentList->addItem("Ольга Волкова");
-        studentList->addItem("Мария Новикова");
-    } else if (cls == "2A") {
-        studentList->addItem("Алексей Морозов");
-        studentList->addItem("Дмитрий Лебедев");
-        studentList->addItem("Елена Соколова");
-    } else if (cls == "2B") {
-        studentList->addItem("Николай Попов");
-        studentList->addItem("Татьяна Федорова");
-    } else if (cls == "3A") {
-        studentList->addItem("Андрей Морозов");
-        studentList->addItem("Екатерина Волкова");
-        studentList->addItem("Сергей Новиков");
-    } else if (cls == "3B") {
-        studentList->addItem("Наталья Соколова");
-        studentList->addItem("Владимир Лебедев");
+    // Загружаем студентов для выбранного класса из DataStore
+    DataStore ds;
+    auto students = ds.getStudentsForClass(cls);
+    for (const QString &student : students) {
+        studentList->addItem(student);
     }
     
     // Загружаем оценки для выбранного класса
