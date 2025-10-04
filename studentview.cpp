@@ -18,38 +18,38 @@ StudentView::StudentView(const QString &username, QWidget *parent) : QWidget(par
     resize(1000, 700);
     setMinimumSize(800, 600);
 
-    // Устанавливаем стили
+    // Устанавливаем брутальные стили
     setStyleSheet(
-        "QWidget { background-color: #2b2b2b; color: white; } "
-        "QTabWidget::pane { border: 1px solid #555; background-color: #3c3c3c; } "
-        "QTabBar::tab { background-color: #4a4a4a; color: white; padding: 10px 20px; margin-right: 2px; } "
-        "QTabBar::tab:selected { background-color: #667eea; } "
-        "QTabBar::tab:hover { background-color: #5a5a5a; } "
-        "QTableWidget { background-color: #3c3c3c; gridline-color: #555; } "
-        "QTableWidget::item { padding: 8px; border-bottom: 1px solid #555; } "
-        "QTableWidget::item:selected { background-color: #667eea; } "
-        "QHeaderView::section { background-color: #4a4a4a; color: white; padding: 10px; border: none; } "
-        "QPushButton { background-color: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; } "
-        "QPushButton:hover { background-color: #5a6fd8; } "
-        "QPushButton:pressed { background-color: #4c63d2; } "
+        "QWidget { background-color: #1a1a1a; color: white; } "
+        "QTabWidget::pane { border: 2px solid #404040; background-color: #2a2a2a; } "
+        "QTabBar::tab { background-color: #404040; color: white; padding: 12px 24px; margin-right: 2px; border: 1px solid #606060; font-weight: bold; letter-spacing: 1px; } "
+        "QTabBar::tab:selected { background-color: #505050; border: 2px solid #707070; } "
+        "QTabBar::tab:hover { background-color: #454545; } "
+        "QTableWidget { background-color: #2a2a2a; gridline-color: #404040; border: 1px solid #404040; } "
+        "QTableWidget::item { padding: 10px; border-bottom: 1px solid #404040; } "
+        "QTableWidget::item:selected { background-color: #505050; } "
+        "QHeaderView::section { background-color: #404040; color: white; padding: 12px; border: 1px solid #606060; font-weight: bold; } "
+        "QPushButton { background-color: #404040; color: white; border: 2px solid #606060; padding: 12px 24px; font-weight: bold; letter-spacing: 1px; } "
+        "QPushButton:hover { background-color: #505050; border: 2px solid #707070; } "
+        "QPushButton:pressed { background-color: #303030; border: 2px solid #505050; } "
     );
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(20);
     mainLayout->setContentsMargins(20, 20, 20, 20);
 
-    // Заголовок
+    // Заголовок в брутальном стиле
     QFrame *headerFrame = new QFrame(this);
-    headerFrame->setStyleSheet("QFrame { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #667eea, stop:1 #764ba2); border-radius: 10px; padding: 15px; }");
+    headerFrame->setStyleSheet("QFrame { background-color: #1a1a1a; border: 2px solid #404040; padding: 15px; }");
     
     QHBoxLayout *headerLayout = new QHBoxLayout(headerFrame);
-    QLabel *userLbl = new QLabel(QString("👨‍🎓 Добро пожаловать, %1!").arg(username), this);
-    userLbl->setStyleSheet("QLabel { color: white; font-size: 24px; font-weight: bold; }");
+    QLabel *userLbl = new QLabel(QString("СТУДЕНТ: %1").arg(username.toUpper()), this);
+    userLbl->setStyleSheet("QLabel { color: white; font-size: 24px; font-weight: bold; letter-spacing: 2px; }");
     headerLayout->addWidget(userLbl);
     headerLayout->addStretch();
     
     QLabel *dateLabel = new QLabel(QDate::currentDate().toString("dd.MM.yyyy"), this);
-    dateLabel->setStyleSheet("QLabel { color: rgba(255, 255, 255, 0.8); font-size: 16px; }");
+    dateLabel->setStyleSheet("QLabel { color: #b0b0b0; font-size: 16px; font-weight: bold; }");
     headerLayout->addWidget(dateLabel);
     
     mainLayout->addWidget(headerFrame);
@@ -90,14 +90,14 @@ StudentView::StudentView(const QString &username, QWidget *parent) : QWidget(par
     }
     
     scheduleLayout->addWidget(scheduleTable);
-    tabs->addTab(scheduleWidget, "📅 Расписание");
+    tabs->addTab(scheduleWidget, "РАСПИСАНИЕ");
 
     // Успеваемость
     QWidget *gradesWidget = new QWidget();
     QVBoxLayout *gradesLayout = new QVBoxLayout(gradesWidget);
     
     QTableWidget *gradesTable = new QTableWidget(0, 4, this);
-    gradesTable->setHorizontalHeaderLabels(QStringList() << "Предмет" << "Оценка" << "Дата" << "Учитель");
+    gradesTable->setHorizontalHeaderLabels(QStringList() << "ПРЕДМЕТ" << "ОЦЕНКА" << "ДАТА" << "УЧИТЕЛЬ");
     gradesTable->verticalHeader()->setVisible(false);
     gradesTable->horizontalHeader()->setStretchLastSection(true);
     gradesTable->setAlternatingRowColors(true);
@@ -114,34 +114,34 @@ StudentView::StudentView(const QString &username, QWidget *parent) : QWidget(par
             gradesTable->setItem(row, 0, new QTableWidgetItem(parts[2])); // Предмет
             gradesTable->setItem(row, 1, new QTableWidgetItem(parts[4])); // Оценка
             gradesTable->setItem(row, 2, new QTableWidgetItem(parts[3])); // Дата
-            gradesTable->setItem(row, 3, new QTableWidgetItem("Учитель")); // Учитель
+            gradesTable->setItem(row, 3, new QTableWidgetItem("УЧИТЕЛЬ")); // Учитель
         }
     }
     
     gradesLayout->addWidget(gradesTable);
-    tabs->addTab(gradesWidget, "📊 Успеваемость");
+    tabs->addTab(gradesWidget, "УСПЕВАЕМОСТЬ");
 
     // Статистика
     QWidget *statsWidget = new QWidget();
     QVBoxLayout *statsLayout = new QVBoxLayout(statsWidget);
     
-    QLabel *statsLabel = new QLabel("📈 Статистика успеваемости", this);
-    statsLabel->setStyleSheet("QLabel { font-size: 18px; font-weight: bold; margin: 10px; }");
+    QLabel *statsLabel = new QLabel("СТАТИСТИКА УСПЕВАЕМОСТИ", this);
+    statsLabel->setStyleSheet("QLabel { font-size: 18px; font-weight: bold; margin: 10px; letter-spacing: 1px; }");
     statsLayout->addWidget(statsLabel);
     
-    // Здесь можно добавить графики или диаграммы
-    QLabel *statsInfo = new QLabel("Средний балл: 8.5\nЛучший предмет: Математика\nКоличество оценок: 15", this);
-    statsInfo->setStyleSheet("QLabel { font-size: 14px; padding: 20px; background-color: rgba(255, 255, 255, 0.1); border-radius: 10px; }");
+    // Статистическая информация в брутальном стиле
+    QLabel *statsInfo = new QLabel("СРЕДНИЙ БАЛЛ: 8.5\nЛУЧШИЙ ПРЕДМЕТ: МАТЕМАТИКА\nКОЛИЧЕСТВО ОЦЕНОК: 15", this);
+    statsInfo->setStyleSheet("QLabel { font-size: 14px; padding: 20px; background-color: #2a2a2a; border: 1px solid #404040; letter-spacing: 1px; }");
     statsLayout->addWidget(statsInfo);
     
-    tabs->addTab(statsWidget, "📈 Статистика");
+    tabs->addTab(statsWidget, "СТАТИСТИКА");
 
     mainLayout->addWidget(tabs);
 
-    // Кнопки
+    // Кнопки в брутальном стиле
     QHBoxLayout *buttonsLayout = new QHBoxLayout();
-    backBtn = new QPushButton("🔙 Назад", this);
-    logoutBtn = new QPushButton("🚪 Выйти из аккаунта", this);
+    backBtn = new QPushButton("НАЗАД", this);
+    logoutBtn = new QPushButton("ВЫЙТИ ИЗ АККАУНТА", this);
     
     buttonsLayout->addWidget(backBtn);
     buttonsLayout->addStretch();

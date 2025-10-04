@@ -19,25 +19,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     resize(800, 600);
     setMinimumSize(600, 500);
 
-    // Устанавливаем современный стиль
+    // Устанавливаем брутальный стиль
     QApplication::setStyle(QStyleFactory::create("Fusion"));
     
-    // Создаем палитру для темной темы
-    QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
-    darkPalette.setColor(QPalette::WindowText, Qt::white);
-    darkPalette.setColor(QPalette::Base, QColor(25, 25, 25));
-    darkPalette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
-    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
-    darkPalette.setColor(QPalette::Text, Qt::white);
-    darkPalette.setColor(QPalette::Button, QColor(53, 53, 53));
-    darkPalette.setColor(QPalette::ButtonText, Qt::white);
-    darkPalette.setColor(QPalette::BrightText, Qt::red);
-    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
-    QApplication::setPalette(darkPalette);
+    // Создаем палитру для брутальной темы
+    QPalette brutalPalette;
+    brutalPalette.setColor(QPalette::Window, QColor(30, 30, 30));
+    brutalPalette.setColor(QPalette::WindowText, Qt::white);
+    brutalPalette.setColor(QPalette::Base, QColor(20, 20, 20));
+    brutalPalette.setColor(QPalette::AlternateBase, QColor(40, 40, 40));
+    brutalPalette.setColor(QPalette::ToolTipBase, QColor(50, 50, 50));
+    brutalPalette.setColor(QPalette::ToolTipText, Qt::white);
+    brutalPalette.setColor(QPalette::Text, Qt::white);
+    brutalPalette.setColor(QPalette::Button, QColor(50, 50, 50));
+    brutalPalette.setColor(QPalette::ButtonText, Qt::white);
+    brutalPalette.setColor(QPalette::BrightText, Qt::white);
+    brutalPalette.setColor(QPalette::Link, QColor(150, 150, 150));
+    brutalPalette.setColor(QPalette::Highlight, QColor(80, 80, 80));
+    brutalPalette.setColor(QPalette::HighlightedText, Qt::white);
+    QApplication::setPalette(brutalPalette);
 
     QWidget *central = new QWidget(this);
     setCentralWidget(central);
@@ -47,93 +47,96 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     mainLayout->setSpacing(30);
     mainLayout->setContentsMargins(50, 50, 50, 50);
 
-    // Заголовок с иконкой
+    // Заголовок в брутальном стиле
     QFrame *headerFrame = new QFrame(this);
     headerFrame->setFrameStyle(QFrame::Box);
-    headerFrame->setStyleSheet("QFrame { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #667eea, stop:1 #764ba2); border-radius: 15px; padding: 20px; }");
+    headerFrame->setStyleSheet("QFrame { background-color: #1a1a1a; border: 2px solid #404040; padding: 20px; }");
     
     QVBoxLayout *headerLayout = new QVBoxLayout(headerFrame);
     headerLayout->setAlignment(Qt::AlignCenter);
     
-    welcomeLabel = new QLabel("🎓 Добро пожаловать в Электронный журнал", this);
+    welcomeLabel = new QLabel("ЭЛЕКТРОННЫЙ ЖУРНАЛ", this);
     welcomeLabel->setAlignment(Qt::AlignCenter);
-    welcomeLabel->setStyleSheet("QLabel { color: white; font-size: 28px; font-weight: bold; margin: 10px; }");
+    welcomeLabel->setStyleSheet("QLabel { color: white; font-size: 32px; font-weight: bold; margin: 10px; letter-spacing: 2px; }");
     
     QLabel *subtitleLabel = new QLabel("Выберите действие для продолжения", this);
     subtitleLabel->setAlignment(Qt::AlignCenter);
-    subtitleLabel->setStyleSheet("QLabel { color: rgba(255, 255, 255, 0.8); font-size: 16px; margin: 5px; }");
+    subtitleLabel->setStyleSheet("QLabel { color: #b0b0b0; font-size: 16px; margin: 5px; }");
     
     headerLayout->addWidget(welcomeLabel);
     headerLayout->addWidget(subtitleLabel);
     mainLayout->addWidget(headerFrame);
 
-    // Кнопки в красивом стиле
+    // Кнопки в брутальном стиле
     QFrame *buttonsFrame = new QFrame(this);
-    buttonsFrame->setStyleSheet("QFrame { background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; }");
+    buttonsFrame->setStyleSheet("QFrame { background-color: #1a1a1a; border: 1px solid #404040; padding: 20px; }");
     
     QVBoxLayout *buttonsLayout = new QVBoxLayout(buttonsFrame);
     buttonsLayout->setSpacing(15);
 
-    regBtn = new QPushButton("👤 Регистрация ученика", this);
+    regBtn = new QPushButton("РЕГИСТРАЦИЯ УЧЕНИКА", this);
     regBtn->setStyleSheet(
         "QPushButton { "
-        "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #4CAF50, stop:1 #45a049); "
-        "border: none; "
+        "background-color: #404040; "
+        "border: 2px solid #606060; "
         "color: white; "
         "font-size: 16px; "
         "font-weight: bold; "
         "padding: 15px; "
-        "border-radius: 10px; "
         "min-height: 20px; "
+        "letter-spacing: 1px; "
         "} "
         "QPushButton:hover { "
-        "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5CBF60, stop:1 #4CAF50); "
-        "transform: translateY(-2px); "
+        "background-color: #505050; "
+        "border: 2px solid #707070; "
         "} "
         "QPushButton:pressed { "
-        "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3d8b40, stop:1 #4CAF50); "
+        "background-color: #303030; "
+        "border: 2px solid #505050; "
         "}"
     );
 
-    loginBtn = new QPushButton("🔑 Вход для ученика", this);
+    loginBtn = new QPushButton("ВХОД ДЛЯ УЧЕНИКА", this);
     loginBtn->setStyleSheet(
         "QPushButton { "
-        "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2196F3, stop:1 #1976D2); "
-        "border: none; "
+        "background-color: #404040; "
+        "border: 2px solid #606060; "
         "color: white; "
         "font-size: 16px; "
         "font-weight: bold; "
         "padding: 15px; "
-        "border-radius: 10px; "
         "min-height: 20px; "
+        "letter-spacing: 1px; "
         "} "
         "QPushButton:hover { "
-        "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #42A5F5, stop:1 #2196F3); "
-        "transform: translateY(-2px); "
+        "background-color: #505050; "
+        "border: 2px solid #707070; "
         "} "
         "QPushButton:pressed { "
-        "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1565C0, stop:1 #1976D2); "
+        "background-color: #303030; "
+        "border: 2px solid #505050; "
         "}"
     );
 
-    teacherAdminBtn = new QPushButton("👨‍🏫 Вход для учителя / администратора", this);
+    teacherAdminBtn = new QPushButton("ВХОД ДЛЯ УЧИТЕЛЯ / АДМИНИСТРАТОРА", this);
     teacherAdminBtn->setStyleSheet(
         "QPushButton { "
-        "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FF9800, stop:1 #F57C00); "
-        "border: none; "
+        "background-color: #404040; "
+        "border: 2px solid #606060; "
         "color: white; "
         "font-size: 16px; "
         "font-weight: bold; "
         "padding: 15px; "
-        "border-radius: 10px; "
         "min-height: 20px; "
+        "letter-spacing: 1px; "
         "} "
         "QPushButton:hover { "
-        "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFB74D, stop:1 #FF9800); "
-        "transform: translateY(-2px); "
+        "background-color: #505050; "
+        "border: 2px solid #707070; "
         "} "
         "QPushButton:pressed { "
-        "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #E65100, stop:1 #F57C00); "
+        "background-color: #303030; "
+        "border: 2px solid #505050; "
         "}"
     );
 
@@ -145,9 +148,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     mainLayout->addStretch();
 
     // Подвал с информацией
-    QLabel *footerLabel = new QLabel("© 2024 Электронный журнал | Версия 2.0", this);
+    QLabel *footerLabel = new QLabel("© 2024 ЭЛЕКТРОННЫЙ ЖУРНАЛ | ВЕРСИЯ 2.0", this);
     footerLabel->setAlignment(Qt::AlignCenter);
-    footerLabel->setStyleSheet("QLabel { color: rgba(255, 255, 255, 0.6); font-size: 12px; margin: 10px; }");
+    footerLabel->setStyleSheet("QLabel { color: #808080; font-size: 12px; margin: 10px; letter-spacing: 1px; }");
     mainLayout->addWidget(footerLabel);
 
     connect(regBtn, &QPushButton::clicked, this, &MainWindow::onRegister);
