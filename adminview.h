@@ -5,6 +5,7 @@
 class QPushButton;
 class QListWidget;
 class QTextEdit;
+class QTabWidget;
 
 class AdminView : public QWidget {
     Q_OBJECT
@@ -25,4 +26,5 @@ private:
     QListWidget *teachersList;
     QListWidget *adminsList;
     QTextEdit *scheduleEdit;
+    QTabWidget *mainTabs;
 };

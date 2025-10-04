@@ -18,40 +18,40 @@ TeacherView::TeacherView(const QString &username, QWidget *parent) : QWidget(par
     resize(1200, 800);
     setMinimumSize(1000, 700);
 
-    // Устанавливаем стили
+    // Устанавливаем брутальные стили
     setStyleSheet(
-        "QWidget { background-color: #2b2b2b; color: white; } "
-        "QListWidget { background-color: #3c3c3c; border: 1px solid #555; border-radius: 5px; } "
-        "QListWidget::item { padding: 10px; border-bottom: 1px solid #555; } "
-        "QListWidget::item:selected { background-color: #667eea; } "
-        "QListWidget::item:hover { background-color: #4a4a4a; } "
-        "QTableWidget { background-color: #3c3c3c; gridline-color: #555; } "
-        "QTableWidget::item { padding: 8px; border-bottom: 1px solid #555; } "
-        "QTableWidget::item:selected { background-color: #667eea; } "
-        "QHeaderView::section { background-color: #4a4a4a; color: white; padding: 10px; border: none; } "
-        "QPushButton { background-color: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; } "
-        "QPushButton:hover { background-color: #5a6fd8; } "
-        "QPushButton:pressed { background-color: #4c63d2; } "
-        "QPushButton#gradeBtn { background-color: #4CAF50; } "
-        "QPushButton#gradeBtn:hover { background-color: #45a049; } "
+        "QWidget { background-color: #1a1a1a; color: white; } "
+        "QListWidget { background-color: #2a2a2a; border: 2px solid #404040; } "
+        "QListWidget::item { padding: 12px; border-bottom: 1px solid #404040; font-weight: bold; } "
+        "QListWidget::item:selected { background-color: #505050; } "
+        "QListWidget::item:hover { background-color: #404040; } "
+        "QTableWidget { background-color: #2a2a2a; gridline-color: #404040; border: 1px solid #404040; } "
+        "QTableWidget::item { padding: 10px; border-bottom: 1px solid #404040; } "
+        "QTableWidget::item:selected { background-color: #505050; } "
+        "QHeaderView::section { background-color: #404040; color: white; padding: 12px; border: 1px solid #606060; font-weight: bold; } "
+        "QPushButton { background-color: #404040; color: white; border: 2px solid #606060; padding: 12px 24px; font-weight: bold; letter-spacing: 1px; } "
+        "QPushButton:hover { background-color: #505050; border: 2px solid #707070; } "
+        "QPushButton:pressed { background-color: #303030; border: 2px solid #505050; } "
+        "QPushButton#gradeBtn { background-color: #505050; border: 2px solid #707070; } "
+        "QPushButton#gradeBtn:hover { background-color: #606060; border: 2px solid #808080; } "
     );
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(20);
     mainLayout->setContentsMargins(20, 20, 20, 20);
 
-    // Заголовок
+    // Заголовок в брутальном стиле
     QFrame *headerFrame = new QFrame(this);
-    headerFrame->setStyleSheet("QFrame { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #667eea, stop:1 #764ba2); border-radius: 10px; padding: 15px; }");
+    headerFrame->setStyleSheet("QFrame { background-color: #1a1a1a; border: 2px solid #404040; padding: 15px; }");
     
     QHBoxLayout *headerLayout = new QHBoxLayout(headerFrame);
-    QLabel *userLbl = new QLabel(QString("👨‍🏫 Добро пожаловать, %1!").arg(username), this);
-    userLbl->setStyleSheet("QLabel { color: white; font-size: 24px; font-weight: bold; }");
+    QLabel *userLbl = new QLabel(QString("УЧИТЕЛЬ: %1").arg(username.toUpper()), this);
+    userLbl->setStyleSheet("QLabel { color: white; font-size: 24px; font-weight: bold; letter-spacing: 2px; }");
     headerLayout->addWidget(userLbl);
     headerLayout->addStretch();
     
     QLabel *dateLabel = new QLabel(QDate::currentDate().toString("dd.MM.yyyy"), this);
-    dateLabel->setStyleSheet("QLabel { color: rgba(255, 255, 255, 0.8); font-size: 16px; }");
+    dateLabel->setStyleSheet("QLabel { color: #b0b0b0; font-size: 16px; font-weight: bold; }");
     headerLayout->addWidget(dateLabel);
     
     mainLayout->addWidget(headerFrame);
@@ -63,8 +63,8 @@ TeacherView::TeacherView(const QString &username, QWidget *parent) : QWidget(par
     QWidget *leftPanel = new QWidget();
     QVBoxLayout *leftLayout = new QVBoxLayout(leftPanel);
     
-    QLabel *classesLabel = new QLabel("📚 Классы:", this);
-    classesLabel->setStyleSheet("QLabel { font-size: 16px; font-weight: bold; margin: 10px 0; }");
+    QLabel *classesLabel = new QLabel("КЛАССЫ:", this);
+    classesLabel->setStyleSheet("QLabel { font-size: 16px; font-weight: bold; margin: 10px 0; letter-spacing: 1px; }");
     leftLayout->addWidget(classesLabel);
     
     classList = new QListWidget(this);
@@ -76,15 +76,15 @@ TeacherView::TeacherView(const QString &username, QWidget *parent) : QWidget(par
     classList->addItem("3B");
     leftLayout->addWidget(classList);
     
-    QLabel *studentsLabel = new QLabel("👥 Студенты:", this);
-    studentsLabel->setStyleSheet("QLabel { font-size: 16px; font-weight: bold; margin: 10px 0; }");
+    QLabel *studentsLabel = new QLabel("СТУДЕНТЫ:", this);
+    studentsLabel->setStyleSheet("QLabel { font-size: 16px; font-weight: bold; margin: 10px 0; letter-spacing: 1px; }");
     leftLayout->addWidget(studentsLabel);
     
     studentList = new QListWidget(this);
-    studentList->addItem("Выберите класс для просмотра студентов");
+    studentList->addItem("ВЫБЕРИТЕ КЛАСС ДЛЯ ПРОСМОТРА СТУДЕНТОВ");
     leftLayout->addWidget(studentList);
     
-    QPushButton *gradeBtn = new QPushButton("📝 Поставить оценку", this);
+    QPushButton *gradeBtn = new QPushButton("ПОСТАВИТЬ ОЦЕНКУ", this);
     gradeBtn->setObjectName("gradeBtn");
     gradeBtn->setEnabled(false);
     leftLayout->addWidget(gradeBtn);
@@ -95,12 +95,12 @@ TeacherView::TeacherView(const QString &username, QWidget *parent) : QWidget(par
     QWidget *rightPanel = new QWidget();
     QVBoxLayout *rightLayout = new QVBoxLayout(rightPanel);
     
-    QLabel *gradesLabel = new QLabel("📊 Оценки класса:", this);
-    gradesLabel->setStyleSheet("QLabel { font-size: 16px; font-weight: bold; margin: 10px 0; }");
+    QLabel *gradesLabel = new QLabel("ОЦЕНКИ КЛАССА:", this);
+    gradesLabel->setStyleSheet("QLabel { font-size: 16px; font-weight: bold; margin: 10px 0; letter-spacing: 1px; }");
     rightLayout->addWidget(gradesLabel);
     
     gradesTable = new QTableWidget(0, 5, this);
-    gradesTable->setHorizontalHeaderLabels(QStringList() << "Студент" << "Предмет" << "Оценка" << "Дата" << "Действия");
+    gradesTable->setHorizontalHeaderLabels(QStringList() << "СТУДЕНТ" << "ПРЕДМЕТ" << "ОЦЕНКА" << "ДАТА" << "ДЕЙСТВИЯ");
     gradesTable->verticalHeader()->setVisible(false);
     gradesTable->horizontalHeader()->setStretchLastSection(true);
     gradesTable->setAlternatingRowColors(true);
@@ -112,9 +112,9 @@ TeacherView::TeacherView(const QString &username, QWidget *parent) : QWidget(par
     
     mainLayout->addWidget(mainSplitter);
 
-    // Кнопки
+    // Кнопки в брутальном стиле
     QHBoxLayout *buttonsLayout = new QHBoxLayout();
-    logoutBtn = new QPushButton("🚪 Выйти", this);
+    logoutBtn = new QPushButton("ВЫЙТИ", this);
     buttonsLayout->addStretch();
     buttonsLayout->addWidget(logoutBtn);
     mainLayout->addLayout(buttonsLayout);
@@ -180,8 +180,8 @@ void TeacherView::loadGradesForClass(const QString &className) {
             gradesTable->setItem(row, 2, new QTableWidgetItem(parts[4])); // Оценка
             gradesTable->setItem(row, 3, new QTableWidgetItem(parts[3])); // Дата
             
-            QPushButton *editBtn = new QPushButton("✏️");
-            editBtn->setStyleSheet("QPushButton { background-color: #FF9800; color: white; border: none; padding: 5px; border-radius: 3px; }");
+            QPushButton *editBtn = new QPushButton("РЕДАКТИРОВАТЬ");
+            editBtn->setStyleSheet("QPushButton { background-color: #505050; color: white; border: 1px solid #707070; padding: 5px; font-weight: bold; }");
             gradesTable->setCellWidget(row, 4, editBtn);
         }
     }
