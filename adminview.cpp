@@ -11,6 +11,13 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
+#include <QFrame>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QHeaderView>
+#include <QTabWidget>
+#include <QSplitter>
+#include <QDate>
 
 AdminView::AdminView(const QString &username, QWidget *parent) : QWidget(parent), username(username) {
     setWindowTitle(QString("Администратор: %1").arg(username));
