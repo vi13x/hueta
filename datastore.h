@@ -1,54 +1,56 @@
-#pragma once
+#ifndef DATASTORE_H
+#define DATASTORE_H
+
 #include "user.h"
+#include <QList>
 #include <QString>
-#include <QVector>
 #include <QMap>
+#include <memory>
+
+class Student;
+class Teacher;
+class Admin;
 
 class DataStore {
 public:
-    DataStore();
-
-    // users
-    QVector<User> loadStudents();
-    bool addStudent(const User &u);
-    bool checkStudentCredentials(const QString &username, const QString &password);
-
-    bool checkTeacherCredentials(const QString &username, const QString &password);
-    bool checkAdminCredentials(const QString &username, const QString &password);
-
-    // teacher/admin files are plain: username:password per line
-    bool addTeacher(const QString &username, const QString &password);
-    bool removeTeacher(const QString &username);
-
-    bool addAdmin(const QString &username, const QString &password);
-    bool removeAdmin(const QString &username);
-
-    // schedule
-    QVector<QString> loadSchedule();
-    bool saveSchedule(const QVector<QString> &lines);
-
-    // grades
-    // grades file format: class|student|subject|date|grade
-    QVector<QString> loadGrades();
-    bool addGrade(const QString &className, const QString &student, const QString &subject, const QString &date, const QString &grade);
-    bool overwriteGrades(const QVector<QString> &lines);
-
-    // classes and students management
-    QVector<QString> getClasses();
-    QVector<QString> getStudentsForClass(const QString &className);
-    bool addStudentToClass(const QString &className, const QString &studentName);
-    bool removeStudentFromClass(const QString &className, const QString &studentName);
+    static DataStore& getInstance();
     
-    // schedule generation
-    void generateDefaultSchedule();
-    QVector<QString> getSubjects();
-    QVector<QString> getTeachers();
+    // User management
+    bool addUser(std::shared_ptr<User> user);
+    std::shared_ptr<User> findUser(const QString& username);
+    bool authenticateUser(const QString& username, const QString& password);
+    QList<std::shared_ptr<User>> getAllUsers() const;
+    
+    // Student specific
+    QList<std::shared_ptr<Student>> getStudents() const;
+    std::shared_ptr<Student> findStudent(const QString& username);
+    
+    // Teacher specific
+    QList<std::shared_ptr<Teacher>> getTeachers() const;
+    std::shared_ptr<Teacher> findTeacher(const QString& username);
+    
+    // Admin specific
+    QList<std::shared_ptr<Admin>> getAdmins() const;
+    std::shared_ptr<Admin> findAdmin(const QString& username);
+    
+    // Data persistence
+    void saveData();
+    void loadData();
+    void initDemoData();
+    
+    // Marks management
+    void addMark(const QString& studentUsername, const QString& subject, int mark);
+    QMap<QString, QList<int>> getStudentMarks(const QString& studentUsername) const;
+    QMap<QString, QMap<QString, QList<int>>> getAllMarks() const;
 
 private:
-    QString studentsFile();
-    QString teachersFile();
-    QString adminsFile();
-    QString scheduleFile();
-    QString gradesFile();
-    QString classesFile();
+    DataStore() = default;
+    ~DataStore() = default;
+    DataStore(const DataStore&) = delete;
+    DataStore& operator=(const DataStore&) = delete;
+    
+    QList<std::shared_ptr<User>> users;
+    QMap<QString, QMap<QString, QList<int>>> marks; // student -> subject -> marks
 };
+
+#endif // DATASTORE_H

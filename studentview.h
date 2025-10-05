@@ -1,21 +1,41 @@
-#pragma once
-#include <QWidget>
-#include <QString>
+#ifndef STUDENTVIEW_H
+#define STUDENTVIEW_H
 
-class QListWidget;
-class QTabWidget;
-class QPushButton;
+#include "user.h"
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QTableWidget>
+#include <QPushButton>
+#include <QHeaderView>
+
+class Student : public User {
+public:
+    Student(const QString& username, const QString& password);
+    QStringList getPermissions() const override;
+};
 
 class StudentView : public QWidget {
     Q_OBJECT
+
 public:
-    StudentView(const QString &username, QWidget *parent = nullptr);
+    explicit StudentView(QWidget *parent = nullptr);
+    void setStudent(std::shared_ptr<Student> student);
+    void refreshMarks();
+
 private slots:
-    void onLogout();
-    void onBack();
+    void onRefreshClicked();
+
 private:
-    QString username;
-    QTabWidget *tabs;
-    QPushButton *logoutBtn;
-    QPushButton *backBtn;
+    void setupUI();
+    void loadMarks();
+
+    std::shared_ptr<Student> currentStudent;
+    QVBoxLayout *mainLayout;
+    QLabel *welcomeLabel;
+    QTableWidget *marksTable;
+    QPushButton *refreshButton;
 };
+
+#endif // STUDENTVIEW_H

@@ -1,25 +1,49 @@
-#pragma once
-#include <QWidget>
-#include <QString>
+#ifndef TEACHERVIEW_H
+#define TEACHERVIEW_H
 
-class QListWidget;
-class QPushButton;
-class QTableWidget;
+#include "user.h"
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QTableWidget>
+#include <QPushButton>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QHeaderView>
+
+class Teacher : public User {
+public:
+    Teacher(const QString& username, const QString& password);
+    QStringList getPermissions() const override;
+};
 
 class TeacherView : public QWidget {
     Q_OBJECT
+
 public:
-    TeacherView(const QString &username, QWidget *parent = nullptr);
+    explicit TeacherView(QWidget *parent = nullptr);
+    void setTeacher(std::shared_ptr<Teacher> teacher);
+    void refreshData();
+
 private slots:
-    void onClassSelected();
-    void onStudentClicked();
-    void onLogout();
+    void onRefreshClicked();
+    void onAddMarkClicked();
+
 private:
-    void loadGradesForClass(const QString &className);
-    QString username;
-    QListWidget *classList;
-    QListWidget *studentList;
-    QPushButton *logoutBtn;
-    QPushButton *gradeBtn;
-    QTableWidget *gradesTable;
+    void setupUI();
+    void loadStudents();
+    void loadMarks();
+
+    std::shared_ptr<Teacher> currentTeacher;
+    QVBoxLayout *mainLayout;
+    QLabel *welcomeLabel;
+    QTableWidget *marksTable;
+    QComboBox *studentCombo;
+    QComboBox *subjectCombo;
+    QSpinBox *markSpinBox;
+    QPushButton *addMarkButton;
+    QPushButton *refreshButton;
 };
+
+#endif // TEACHERVIEW_H

@@ -1,40 +1,34 @@
-// Файл для инициализации демо-данных
-// Этот файл можно использовать для создания начальных данных при первом запуске
-
 #include "datastore.h"
-#include <QApplication>
-#include <QMessageBox>
+#include "studentview.h"
+#include "teacherview.h"
+#include "adminview.h"
 
-void initializeDemoData() {
-    DataStore ds;
+void initDemoData() {
+    DataStore& store = DataStore::getInstance();
     
-    // Создаем демо-учителей
-    ds.addTeacher("Иванова А.И.", "teacher123");
-    ds.addTeacher("Петров П.П.", "teacher123");
-    ds.addTeacher("Сидорова С.С.", "teacher123");
-    ds.addTeacher("Козлов К.К.", "teacher123");
-    ds.addTeacher("Волкова В.В.", "teacher123");
+    // Clear existing data
+    // store.clearAllData(); // Would need to implement this method
     
-    // Создаем демо-администратора
-    ds.addAdmin("admin", "admin123");
+    // Add demo users
+    store.addUser(std::make_shared<Admin>("admin", "admin123"));
+    store.addUser(std::make_shared<Teacher>("teacher1", "teacher123"));
+    store.addUser(std::make_shared<Teacher>("teacher2", "teacher123"));
+    store.addUser(std::make_shared<Student>("student1", "student123"));
+    store.addUser(std::make_shared<Student>("student2", "student123"));
+    store.addUser(std::make_shared<Student>("student3", "student123"));
     
-    // Создаем демо-студентов
-    ds.addStudent({"Иванов Иван", "student123", "student"});
-    ds.addStudent({"Петров Петр", "student123", "student"});
-    ds.addStudent({"Сидоров Сидор", "student123", "student"});
-    ds.addStudent({"Козлова Анна", "student123", "student"});
-    ds.addStudent({"Анна Смирнова", "student123", "student"});
-    ds.addStudent({"Ольга Волкова", "student123", "student"});
-    ds.addStudent({"Мария Новикова", "student123", "student"});
+    // Add demo marks
+    store.addMark("student1", "Математика", 5);
+    store.addMark("student1", "Математика", 4);
+    store.addMark("student1", "Физика", 5);
+    store.addMark("student1", "Информатика", 5);
     
-    // Генерируем базовое расписание
-    ds.generateDefaultSchedule();
+    store.addMark("student2", "Математика", 3);
+    store.addMark("student2", "Физика", 4);
+    store.addMark("student2", "Химия", 3);
     
-    // Добавляем демо-оценки
-    ds.addGrade("1A", "Иванов Иван", "Математика", "2024-01-15", "5");
-    ds.addGrade("1A", "Иванов Иван", "Русский язык", "2024-01-16", "4");
-    ds.addGrade("1A", "Петров Петр", "Математика", "2024-01-15", "4");
-    ds.addGrade("1A", "Петров Петр", "Физика", "2024-01-17", "5");
-    ds.addGrade("1B", "Анна Смирнова", "История", "2024-01-16", "5");
-    ds.addGrade("1B", "Ольга Волкова", "Литература", "2024-01-18", "4");
+    store.addMark("student3", "Математика", 5);
+    store.addMark("student3", "Химия", 4);
+    store.addMark("student3", "Русский язык", 5);
+    store.addMark("student3", "Информатика", 4);
 }

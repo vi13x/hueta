@@ -1,21 +1,55 @@
-#pragma once
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
 #include <QMainWindow>
-#include <QPushButton>
-#include <QLabel>
-#include "datastore.h"
+#include <QStackedWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QMenuBar>
+#include <QStatusBar>
+#include <QAction>
+#include <QMessageBox>
+#include <memory>
+
+class User;
+class StudentView;
+class TeacherView;
+class AdminView;
+class LoginDialog;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
+
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
 private slots:
-    void onRegister();
     void onLogin();
-    void onTeacherAdminLogin();
+    void onLogout();
+    void onExit();
+    void onAbout();
+
 private:
-    DataStore ds;
-    QLabel *welcomeLabel;
-    QPushButton *regBtn;
-    QPushButton *loginBtn;
-    QPushButton *teacherAdminBtn;
+    void setupUI();
+    void setupMenuBar();
+    void setupStatusBar();
+    void showUserView();
+    void clearCurrentView();
+
+    QStackedWidget *stackedWidget;
+    QWidget *welcomeWidget;
+    StudentView *studentView;
+    TeacherView *teacherView;
+    AdminView *adminView;
+    
+    QAction *loginAction;
+    QAction *logoutAction;
+    QAction *exitAction;
+    QAction *aboutAction;
+    
+    std::shared_ptr<User> currentUser;
+    LoginDialog *loginDialog;
 };
+
+#endif // MAINWINDOW_H

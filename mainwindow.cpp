@@ -1,205 +1,176 @@
 #include "mainwindow.h"
-#include "registrationdialog.h"
 #include "logindialog.h"
+#include "datastore.h"
 #include "studentview.h"
 #include "teacherview.h"
 #include "adminview.h"
-#include <QVBoxLayout>
-#include <QWidget>
-#include <QMessageBox>
-#include <QHBoxLayout>
-#include <QFrame>
-#include <QFont>
-#include <QPalette>
-#include <QApplication>
-#include <QStyleFactory>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-    setWindowTitle("📚 Электронный журнал");
-    resize(800, 600);
-    setMinimumSize(600, 500);
-
-    // Устанавливаем брутальный стиль
-    QApplication::setStyle(QStyleFactory::create("Fusion"));
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), currentUser(nullptr), loginDialog(nullptr) {
+    setupUI();
+    setWindowTitle("Academic Ledger - Система управления академическими записями");
+    setMinimumSize(800, 600);
     
-    // Создаем палитру для брутальной темы
-    QPalette brutalPalette;
-    brutalPalette.setColor(QPalette::Window, QColor(30, 30, 30));
-    brutalPalette.setColor(QPalette::WindowText, Qt::white);
-    brutalPalette.setColor(QPalette::Base, QColor(20, 20, 20));
-    brutalPalette.setColor(QPalette::AlternateBase, QColor(40, 40, 40));
-    brutalPalette.setColor(QPalette::ToolTipBase, QColor(50, 50, 50));
-    brutalPalette.setColor(QPalette::ToolTipText, Qt::white);
-    brutalPalette.setColor(QPalette::Text, Qt::white);
-    brutalPalette.setColor(QPalette::Button, QColor(50, 50, 50));
-    brutalPalette.setColor(QPalette::ButtonText, Qt::white);
-    brutalPalette.setColor(QPalette::BrightText, Qt::white);
-    brutalPalette.setColor(QPalette::Link, QColor(150, 150, 150));
-    brutalPalette.setColor(QPalette::Highlight, QColor(80, 80, 80));
-    brutalPalette.setColor(QPalette::HighlightedText, Qt::white);
-    QApplication::setPalette(brutalPalette);
-
-    QWidget *central = new QWidget(this);
-    setCentralWidget(central);
-    
-    // Основной layout
-    QVBoxLayout *mainLayout = new QVBoxLayout(central);
-    mainLayout->setSpacing(20);
-    mainLayout->setContentsMargins(30, 30, 30, 30);
-
-    // Заголовок в брутальном стиле
-    QFrame *headerFrame = new QFrame(this);
-    headerFrame->setFrameStyle(QFrame::Box);
-    headerFrame->setStyleSheet("QFrame { background-color: #1a1a1a; border: 2px solid #404040; padding: 20px; }");
-    
-    QVBoxLayout *headerLayout = new QVBoxLayout(headerFrame);
-    headerLayout->setAlignment(Qt::AlignCenter);
-    
-    welcomeLabel = new QLabel("ЭЛЕКТРОННЫЙ ЖУРНАЛ", this);
-    welcomeLabel->setAlignment(Qt::AlignCenter);
-    welcomeLabel->setStyleSheet("QLabel { color: white; font-size: 28px; font-weight: bold; margin: 5px; letter-spacing: 1px; }");
-    
-    QLabel *subtitleLabel = new QLabel("ДОБРО ПОЖАЛОВАТЬ В СИСТЕМУ УПРАВЛЕНИЯ ОБРАЗОВАНИЕМ", this);
-    subtitleLabel->setAlignment(Qt::AlignCenter);
-    subtitleLabel->setStyleSheet("QLabel { color: #b0b0b0; font-size: 14px; margin: 5px; }");
-    
-    headerLayout->addWidget(welcomeLabel);
-    headerLayout->addWidget(subtitleLabel);
-    mainLayout->addWidget(headerFrame);
-
-    // Кнопки в брутальном стиле
-    QFrame *buttonsFrame = new QFrame(this);
-    buttonsFrame->setStyleSheet("QFrame { background-color: #1a1a1a; border: 1px solid #404040; padding: 20px; }");
-    
-    QVBoxLayout *buttonsLayout = new QVBoxLayout(buttonsFrame);
-    buttonsLayout->setSpacing(15);
-
-    regBtn = new QPushButton("РЕГИСТРАЦИЯ УЧЕНИКА", this);
-    regBtn->setStyleSheet(
-        "QPushButton { "
-        "background-color: #404040; "
-        "border: 2px solid #606060; "
-        "color: white; "
-        "font-size: 16px; "
-        "font-weight: bold; "
-        "padding: 15px; "
-        "min-height: 20px; "
-        "letter-spacing: 1px; "
-        "} "
-        "QPushButton:hover { "
-        "background-color: #505050; "
-        "border: 2px solid #707070; "
-        "} "
-        "QPushButton:pressed { "
-        "background-color: #303030; "
-        "border: 2px solid #505050; "
-        "}"
-    );
-
-    loginBtn = new QPushButton("ВХОД ДЛЯ УЧЕНИКА", this);
-    loginBtn->setStyleSheet(
-        "QPushButton { "
-        "background-color: #404040; "
-        "border: 2px solid #606060; "
-        "color: white; "
-        "font-size: 16px; "
-        "font-weight: bold; "
-        "padding: 15px; "
-        "min-height: 20px; "
-        "letter-spacing: 1px; "
-        "} "
-        "QPushButton:hover { "
-        "background-color: #505050; "
-        "border: 2px solid #707070; "
-        "} "
-        "QPushButton:pressed { "
-        "background-color: #303030; "
-        "border: 2px solid #505050; "
-        "}"
-    );
-
-    teacherAdminBtn = new QPushButton("ВХОД ДЛЯ УЧИТЕЛЯ / АДМИНИСТРАТОРА", this);
-    teacherAdminBtn->setStyleSheet(
-        "QPushButton { "
-        "background-color: #404040; "
-        "border: 2px solid #606060; "
-        "color: white; "
-        "font-size: 16px; "
-        "font-weight: bold; "
-        "padding: 15px; "
-        "min-height: 20px; "
-        "letter-spacing: 1px; "
-        "} "
-        "QPushButton:hover { "
-        "background-color: #505050; "
-        "border: 2px solid #707070; "
-        "} "
-        "QPushButton:pressed { "
-        "background-color: #303030; "
-        "border: 2px solid #505050; "
-        "}"
-    );
-
-    buttonsLayout->addWidget(regBtn);
-    buttonsLayout->addWidget(loginBtn);
-    buttonsLayout->addWidget(teacherAdminBtn);
-    
-    mainLayout->addWidget(buttonsFrame);
-    mainLayout->addStretch();
-
-    // Подвал с информацией
-    QLabel *footerLabel = new QLabel("© 2024 ЭЛЕКТРОННЫЙ ЖУРНАЛ | ВЕРСИЯ 2.0", this);
-    footerLabel->setAlignment(Qt::AlignCenter);
-    footerLabel->setStyleSheet("QLabel { color: #808080; font-size: 12px; margin: 10px; letter-spacing: 1px; }");
-    mainLayout->addWidget(footerLabel);
-
-    connect(regBtn, &QPushButton::clicked, this, &MainWindow::onRegister);
-    connect(loginBtn, &QPushButton::clicked, this, &MainWindow::onLogin);
-    connect(teacherAdminBtn, &QPushButton::clicked, this, &MainWindow::onTeacherAdminLogin);
+    // Initialize demo data
+    DataStore::getInstance().initDemoData();
 }
 
-void MainWindow::onRegister() {
-    RegistrationDialog dlg(this);
-    if (dlg.exec() == QDialog::Accepted) {
-        User u = dlg.user();
-        if (ds.addStudent(u)) {
-            QMessageBox::information(this, "OK", "Регистрация прошла успешно. Теперь войдите.");
-        } else {
-            QMessageBox::warning(this, "Ошибка", "Пользователь с таким именем уже существует.");
-        }
+MainWindow::~MainWindow() {
+    if (loginDialog) {
+        delete loginDialog;
     }
+}
+
+void MainWindow::setupUI() {
+    setupMenuBar();
+    setupStatusBar();
+    
+    // Create stacked widget for different views
+    stackedWidget = new QStackedWidget();
+    setCentralWidget(stackedWidget);
+    
+    // Welcome widget
+    welcomeWidget = new QWidget();
+    QVBoxLayout *welcomeLayout = new QVBoxLayout(welcomeWidget);
+    
+    QLabel *welcomeLabel = new QLabel("Добро пожаловать в Academic Ledger");
+    welcomeLabel->setAlignment(Qt::AlignCenter);
+    welcomeLabel->setStyleSheet("font-size: 24px; font-weight: bold; margin: 50px;");
+    welcomeLayout->addWidget(welcomeLabel);
+    
+    QLabel *infoLabel = new QLabel("Система управления академическими записями\n\n"
+                                  "Для начала работы войдите в систему или зарегистрируйтесь");
+    infoLabel->setAlignment(Qt::AlignCenter);
+    infoLabel->setStyleSheet("font-size: 14px; margin: 20px;");
+    welcomeLayout->addWidget(infoLabel);
+    
+    QPushButton *loginButton = new QPushButton("Войти в систему");
+    loginButton->setStyleSheet("font-size: 16px; padding: 10px; margin: 20px;");
+    connect(loginButton, &QPushButton::clicked, this, &MainWindow::onLogin);
+    welcomeLayout->addWidget(loginButton);
+    
+    stackedWidget->addWidget(welcomeWidget);
+    
+    // Create user views
+    studentView = new StudentView();
+    teacherView = new TeacherView();
+    adminView = new AdminView();
+    
+    stackedWidget->addWidget(studentView);
+    stackedWidget->addWidget(teacherView);
+    stackedWidget->addWidget(adminView);
+    
+    // Show welcome screen initially
+    stackedWidget->setCurrentWidget(welcomeWidget);
+}
+
+void MainWindow::setupMenuBar() {
+    QMenuBar *menuBar = this->menuBar();
+    
+    // File menu
+    QMenu *fileMenu = menuBar->addMenu("Файл");
+    
+    loginAction = new QAction("Войти", this);
+    loginAction->setShortcut(QKeySequence("Ctrl+L"));
+    connect(loginAction, &QAction::triggered, this, &MainWindow::onLogin);
+    fileMenu->addAction(loginAction);
+    
+    logoutAction = new QAction("Выйти", this);
+    logoutAction->setShortcut(QKeySequence("Ctrl+Shift+L"));
+    logoutAction->setEnabled(false);
+    connect(logoutAction, &QAction::triggered, this, &MainWindow::onLogout);
+    fileMenu->addAction(logoutAction);
+    
+    fileMenu->addSeparator();
+    
+    exitAction = new QAction("Выход", this);
+    exitAction->setShortcut(QKeySequence("Ctrl+Q"));
+    connect(exitAction, &QAction::triggered, this, &MainWindow::onExit);
+    fileMenu->addAction(exitAction);
+    
+    // Help menu
+    QMenu *helpMenu = menuBar->addMenu("Справка");
+    
+    aboutAction = new QAction("О программе", this);
+    connect(aboutAction, &QAction::triggered, this, &MainWindow::onAbout);
+    helpMenu->addAction(aboutAction);
+}
+
+void MainWindow::setupStatusBar() {
+    statusBar()->showMessage("Готов к работе");
 }
 
 void MainWindow::onLogin() {
-    LoginDialog dlg(LoginDialog::Role::Student, this);
-    if (dlg.exec() == QDialog::Accepted) {
-        QString username = dlg.username();
-        QString password = dlg.password();
-        if (ds.checkStudentCredentials(username, password)) {
-            StudentView *sv = new StudentView(username);
-            sv->setAttribute(Qt::WA_DeleteOnClose);
-            sv->show();
-        } else {
-            QMessageBox::warning(this, "Ошибка", "Неверные учётные данные ученика.");
+    if (!loginDialog) {
+        loginDialog = new LoginDialog(this);
+    }
+    
+    if (loginDialog->exec() == QDialog::Accepted) {
+        currentUser = loginDialog->getAuthenticatedUser();
+        if (currentUser) {
+            showUserView();
+            statusBar()->showMessage("Вход выполнен: " + currentUser->getUsername());
         }
     }
 }
 
-void MainWindow::onTeacherAdminLogin() {
-    LoginDialog dlg(LoginDialog::Role::TeacherOrAdmin, this);
-    if (dlg.exec() == QDialog::Accepted) {
-        QString username = dlg.username();
-        QString password = dlg.password();
-        if (ds.checkTeacherCredentials(username, password)) {
-            TeacherView *tv = new TeacherView(username);
-            tv->setAttribute(Qt::WA_DeleteOnClose);
-            tv->show();
-        } else if (ds.checkAdminCredentials(username, password)) {
-            AdminView *av = new AdminView(username);
-            av->setAttribute(Qt::WA_DeleteOnClose);
-            av->show();
-        } else {
-            QMessageBox::warning(this, "Ошибка", "Неверные учётные данные (учитель/админ).");
+void MainWindow::onLogout() {
+    clearCurrentView();
+    currentUser = nullptr;
+    stackedWidget->setCurrentWidget(welcomeWidget);
+    statusBar()->showMessage("Выход выполнен");
+}
+
+void MainWindow::onExit() {
+    close();
+}
+
+void MainWindow::onAbout() {
+    QMessageBox::about(this, "О программе",
+                      "Academic Ledger v1.0\n\n"
+                      "Система управления академическими записями\n"
+                      "Разработано для управления оценками студентов,\n"
+                      "преподавателями и администраторами.\n\n"
+                      "© 2024 Academic Ledger Team");
+}
+
+void MainWindow::showUserView() {
+    if (!currentUser) return;
+    
+    switch (currentUser->getRole()) {
+        case UserRole::Student: {
+            auto student = std::dynamic_pointer_cast<Student>(currentUser);
+            if (student) {
+                studentView->setStudent(student);
+                stackedWidget->setCurrentWidget(studentView);
+            }
+            break;
+        }
+        case UserRole::Teacher: {
+            auto teacher = std::dynamic_pointer_cast<Teacher>(currentUser);
+            if (teacher) {
+                teacherView->setTeacher(teacher);
+                stackedWidget->setCurrentWidget(teacherView);
+            }
+            break;
+        }
+        case UserRole::Admin: {
+            auto admin = std::dynamic_pointer_cast<Admin>(currentUser);
+            if (admin) {
+                adminView->setAdmin(admin);
+                stackedWidget->setCurrentWidget(adminView);
+            }
+            break;
         }
     }
+    
+    // Update menu actions
+    loginAction->setEnabled(false);
+    logoutAction->setEnabled(true);
+}
+
+void MainWindow::clearCurrentView() {
+    // Update menu actions
+    loginAction->setEnabled(true);
+    logoutAction->setEnabled(false);
 }

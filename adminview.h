@@ -1,31 +1,58 @@
-#pragma once
-#include <QWidget>
-#include <QString>
+#ifndef ADMINVIEW_H
+#define ADMINVIEW_H
 
-class QPushButton;
-class QListWidget;
-class QTextEdit;
-class QTabWidget;
+#include "user.h"
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QTableWidget>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QHeaderView>
+
+class Admin : public User {
+public:
+    Admin(const QString& username, const QString& password);
+    QStringList getPermissions() const override;
+};
 
 class AdminView : public QWidget {
     Q_OBJECT
+
 public:
-    AdminView(const QString &username, QWidget *parent = nullptr);
+    explicit AdminView(QWidget *parent = nullptr);
+    void setAdmin(std::shared_ptr<Admin> admin);
+    void refreshData();
+
 private slots:
-    void onLogout();
-    void onAddTeacher();
-    void onRemoveTeacher();
-    void onAddAdmin();
-    void onRemoveAdmin();
-    void onLoadSchedule();
-    void onSaveSchedule();
-    void onGenerateSchedule();
-    void onViewGrades();
-    void onClearGrades();
+    void onRefreshClicked();
+    void onAddUserClicked();
+    void onDeleteUserClicked();
+
 private:
-    QString username;
-    QListWidget *teachersList;
-    QListWidget *adminsList;
-    QTextEdit *scheduleEdit;
-    QTabWidget *mainTabs;
+    void setupUI();
+    void loadUsers();
+    void loadMarks();
+
+    std::shared_ptr<Admin> currentAdmin;
+    QVBoxLayout *mainLayout;
+    QLabel *welcomeLabel;
+    QTabWidget *tabWidget;
+    
+    // Users tab
+    QTableWidget *usersTable;
+    QLineEdit *usernameEdit;
+    QLineEdit *passwordEdit;
+    QComboBox *roleCombo;
+    QPushButton *addUserButton;
+    QPushButton *deleteUserButton;
+    
+    // Marks tab
+    QTableWidget *marksTable;
+    QPushButton *refreshButton;
 };
+
+#endif // ADMINVIEW_H

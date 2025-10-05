@@ -1,255 +1,204 @@
 #include "adminview.h"
 #include "datastore.h"
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QListWidget>
-#include <QInputDialog>
-#include <QMessageBox>
-#include <QTextEdit>
-#include <QFile>
-#include <QTextStream>
-#include <QDir>
-#include <QFrame>
-#include <QTableWidget>
-#include <QTableWidgetItem>
+#include "studentview.h"
+#include "teacherview.h"
 #include <QHeaderView>
-#include <QTabWidget>
-#include <QSplitter>
-#include <QDate>
+#include <QMessageBox>
+#include <QInputDialog>
 
-AdminView::AdminView(const QString &username, QWidget *parent) : QWidget(parent), username(username) {
-    setWindowTitle(QString("АДМИНИСТРАТОР: %1").arg(username));
-    resize(1200, 800);
-    setMinimumSize(1000, 700);
+Admin::Admin(const QString& username, const QString& password)
+    : User(username, password, UserRole::Admin) {
+}
 
-    // Устанавливаем брутальные стили
-    setStyleSheet(
-        "QWidget { background-color: #1a1a1a; color: white; } "
-        "QListWidget { background-color: #2a2a2a; border: 2px solid #404040; } "
-        "QListWidget::item { padding: 12px; border-bottom: 1px solid #404040; font-weight: bold; } "
-        "QListWidget::item:selected { background-color: #505050; } "
-        "QListWidget::item:hover { background-color: #404040; } "
-        "QTextEdit { background-color: #2a2a2a; border: 2px solid #404040; color: white; font-family: monospace; } "
-        "QPushButton { background-color: #404040; color: white; border: 2px solid #606060; padding: 12px 24px; font-weight: bold; letter-spacing: 1px; } "
-        "QPushButton:hover { background-color: #505050; border: 2px solid #707070; } "
-        "QPushButton:pressed { background-color: #303030; border: 2px solid #505050; } "
-        "QLabel { color: white; font-weight: bold; } "
-    );
+QStringList Admin::getPermissions() const {
+    return {"view_all_users", "add_users", "delete_users", "view_all_marks", "edit_all_marks"};
+}
 
-    QVBoxLayout *main = new QVBoxLayout(this);
-    main->setSpacing(20);
-    main->setContentsMargins(20, 20, 20, 20);
+AdminView::AdminView(QWidget *parent)
+    : QWidget(parent), currentAdmin(nullptr) {
+    setupUI();
+}
 
-    // Заголовок в брутальном стиле
-    QFrame *headerFrame = new QFrame(this);
-    headerFrame->setStyleSheet("QFrame { background-color: #1a1a1a; border: 2px solid #404040; padding: 15px; }");
+void AdminView::setupUI() {
+    mainLayout = new QVBoxLayout(this);
     
-    QHBoxLayout *headerLayout = new QHBoxLayout(headerFrame);
-    QLabel *userLbl = new QLabel(QString("АДМИНИСТРАТОР: %1").arg(username.toUpper()), this);
-    userLbl->setStyleSheet("QLabel { color: white; font-size: 24px; font-weight: bold; letter-spacing: 2px; }");
-    headerLayout->addWidget(userLbl);
-    headerLayout->addStretch();
+    welcomeLabel = new QLabel("Добро пожаловать, администратор!");
+    welcomeLabel->setStyleSheet("font-size: 18px; font-weight: bold; margin: 10px;");
+    mainLayout->addWidget(welcomeLabel);
     
-    QLabel *dateLabel = new QLabel(QDate::currentDate().toString("dd.MM.yyyy"), this);
-    dateLabel->setStyleSheet("QLabel { color: #b0b0b0; font-size: 16px; font-weight: bold; }");
-    headerLayout->addWidget(dateLabel);
+    tabWidget = new QTabWidget();
     
-    main->addWidget(headerFrame);
-
-    // Основной контент с вкладками
-    QTabWidget *mainTabs = new QTabWidget(this);
-    mainTabs->setStyleSheet(
-        "QTabWidget::pane { border: 2px solid #404040; background-color: #2a2a2a; } "
-        "QTabBar::tab { background-color: #404040; color: white; padding: 12px 24px; margin-right: 2px; border: 1px solid #606060; font-weight: bold; letter-spacing: 1px; } "
-        "QTabBar::tab:selected { background-color: #505050; border: 2px solid #707070; } "
-        "QTabBar::tab:hover { background-color: #454545; } "
-    );
-
-    // Вкладка управления пользователями
+    // Users tab
     QWidget *usersTab = new QWidget();
-    QHBoxLayout *usersLayout = new QHBoxLayout(usersTab);
-
-    // Учителя
-    QVBoxLayout *tcol = new QVBoxLayout();
-    QLabel *teachersLabel = new QLabel("УЧИТЕЛЯ:", this);
-    teachersLabel->setStyleSheet("QLabel { font-size: 16px; font-weight: bold; margin: 10px 0; letter-spacing: 1px; }");
-    tcol->addWidget(teachersLabel);
+    QVBoxLayout *usersLayout = new QVBoxLayout(usersTab);
     
-    teachersList = new QListWidget(this);
-    // load from file
-    QFile tf(QDir::currentPath() + "/teachers.txt");
-    if (tf.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&tf);
-        while (!in.atEnd()) {
-            QString line = in.readLine().trimmed();
-            if (!line.isEmpty()) teachersList->addItem(line.split(':').first());
+    // Add user section
+    QHBoxLayout *addUserLayout = new QHBoxLayout();
+    addUserLayout->addWidget(new QLabel("Имя пользователя:"));
+    usernameEdit = new QLineEdit();
+    addUserLayout->addWidget(usernameEdit);
+    
+    addUserLayout->addWidget(new QLabel("Пароль:"));
+    passwordEdit = new QLineEdit();
+    passwordEdit->setEchoMode(QLineEdit::Password);
+    addUserLayout->addWidget(passwordEdit);
+    
+    addUserLayout->addWidget(new QLabel("Роль:"));
+    roleCombo = new QComboBox();
+    roleCombo->addItems({"Студент", "Преподаватель", "Администратор"});
+    addUserLayout->addWidget(roleCombo);
+    
+    addUserButton = new QPushButton("Добавить пользователя");
+    connect(addUserButton, &QPushButton::clicked, this, &AdminView::onAddUserClicked);
+    addUserLayout->addWidget(addUserButton);
+    
+    deleteUserButton = new QPushButton("Удалить пользователя");
+    connect(deleteUserButton, &QPushButton::clicked, this, &AdminView::onDeleteUserClicked);
+    addUserLayout->addWidget(deleteUserButton);
+    
+    usersLayout->addLayout(addUserLayout);
+    
+    usersTable = new QTableWidget();
+    usersTable->setColumnCount(3);
+    usersTable->setHorizontalHeaderLabels({"Имя пользователя", "Роль", "Пароль"});
+    usersTable->horizontalHeader()->setStretchLastSection(true);
+    usersTable->setAlternatingRowColors(true);
+    usersLayout->addWidget(usersTable);
+    
+    tabWidget->addTab(usersTab, "Пользователи");
+    
+    // Marks tab
+    QWidget *marksTab = new QWidget();
+    QVBoxLayout *marksLayout = new QVBoxLayout(marksTab);
+    
+    marksTable = new QTableWidget();
+    marksTable->setColumnCount(3);
+    marksTable->setHorizontalHeaderLabels({"Студент", "Предмет", "Оценки"});
+    marksTable->horizontalHeader()->setStretchLastSection(true);
+    marksTable->setAlternatingRowColors(true);
+    marksLayout->addWidget(marksTable);
+    
+    tabWidget->addTab(marksTab, "Оценки");
+    
+    mainLayout->addWidget(tabWidget);
+    
+    refreshButton = new QPushButton("Обновить");
+    connect(refreshButton, &QPushButton::clicked, this, &AdminView::onRefreshClicked);
+    mainLayout->addWidget(refreshButton);
+}
+
+void AdminView::setAdmin(std::shared_ptr<Admin> admin) {
+    currentAdmin = admin;
+    if (currentAdmin) {
+        welcomeLabel->setText("Добро пожаловать, " + currentAdmin->getUsername() + "!");
+        loadUsers();
+        loadMarks();
+    }
+}
+
+void AdminView::loadUsers() {
+    auto users = DataStore::getInstance().getAllUsers();
+    usersTable->setRowCount(users.size());
+    
+    for (int i = 0; i < users.size(); ++i) {
+        auto user = users[i];
+        usersTable->setItem(i, 0, new QTableWidgetItem(user->getUsername()));
+        usersTable->setItem(i, 1, new QTableWidgetItem(user->getRoleString()));
+        usersTable->setItem(i, 2, new QTableWidgetItem("***")); // Don't show password
+    }
+}
+
+void AdminView::loadMarks() {
+    auto allMarks = DataStore::getInstance().getAllMarks();
+    
+    int totalRows = 0;
+    for (auto& studentMarks : allMarks) {
+        totalRows += studentMarks.size();
+    }
+    
+    marksTable->setRowCount(totalRows);
+    
+    int row = 0;
+    for (auto studentIt = allMarks.begin(); studentIt != allMarks.end(); ++studentIt) {
+        for (auto subjectIt = studentIt.value().begin(); subjectIt != studentIt.value().end(); ++subjectIt) {
+            marksTable->setItem(row, 0, new QTableWidgetItem(studentIt.key()));
+            marksTable->setItem(row, 1, new QTableWidgetItem(subjectIt.key()));
+            
+            QString marksStr;
+            for (int mark : subjectIt.value()) {
+                if (!marksStr.isEmpty()) marksStr += ", ";
+                marksStr += QString::number(mark);
+            }
+            marksTable->setItem(row, 2, new QTableWidgetItem(marksStr));
+            row++;
         }
     }
-    tcol->addWidget(teachersList);
-    QPushButton *addT = new QPushButton("ДОБАВИТЬ УЧИТЕЛЯ", this);
-    QPushButton *remT = new QPushButton("УДАЛИТЬ УЧИТЕЛЯ", this);
-    tcol->addWidget(addT);
-    tcol->addWidget(remT);
+}
 
-    usersLayout->addLayout(tcol);
+void AdminView::refreshData() {
+    loadUsers();
+    loadMarks();
+}
 
-    // Администраторы
-    QVBoxLayout *acol = new QVBoxLayout();
-    QLabel *adminsLabel = new QLabel("АДМИНИСТРАТОРЫ:", this);
-    adminsLabel->setStyleSheet("QLabel { font-size: 16px; font-weight: bold; margin: 10px 0; letter-spacing: 1px; }");
-    acol->addWidget(adminsLabel);
+void AdminView::onRefreshClicked() {
+    refreshData();
+}
+
+void AdminView::onAddUserClicked() {
+    QString username = usernameEdit->text().trimmed();
+    QString password = passwordEdit->text().trimmed();
     
-    adminsList = new QListWidget(this);
-    QFile af(QDir::currentPath() + "/admins.txt");
-    if (af.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&af);
-        while (!in.atEnd()) {
-            QString line = in.readLine().trimmed();
-            if (!line.isEmpty()) adminsList->addItem(line.split(':').first());
-        }
+    if (username.isEmpty() || password.isEmpty()) {
+        QMessageBox::warning(this, "Ошибка", "Заполните все поля");
+        return;
     }
-    acol->addWidget(adminsList);
-    QPushButton *addA = new QPushButton("ДОБАВИТЬ АДМИНА", this);
-    QPushButton *remA = new QPushButton("УДАЛИТЬ АДМИНА", this);
-    acol->addWidget(addA);
-    acol->addWidget(remA);
-
-    usersLayout->addLayout(acol);
-    mainTabs->addTab(usersTab, "УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ");
-
-    // Вкладка расписания
-    QWidget *scheduleTab = new QWidget();
-    QVBoxLayout *scheduleLayout = new QVBoxLayout(scheduleTab);
     
-    QLabel *scheduleLabel = new QLabel("РАСПИСАНИЕ (КАЖДАЯ СТРОКА — ЗАПИСЬ):", this);
-    scheduleLabel->setStyleSheet("QLabel { font-size: 16px; font-weight: bold; margin: 10px 0; letter-spacing: 1px; }");
-    scheduleLayout->addWidget(scheduleLabel);
-    
-    scheduleEdit = new QTextEdit(this);
-    // load schedule
-    DataStore ds;
-    auto lines = ds.loadSchedule();
-    for (auto &l : lines) {
-        scheduleEdit->append(l);
+    UserRole role;
+    switch (roleCombo->currentIndex()) {
+        case 0: role = UserRole::Student; break;
+        case 1: role = UserRole::Teacher; break;
+        case 2: role = UserRole::Admin; break;
+        default: role = UserRole::Student; break;
     }
-    scheduleLayout->addWidget(scheduleEdit);
     
-    QHBoxLayout *scheduleButtons = new QHBoxLayout();
-    QPushButton *loadS = new QPushButton("ЗАГРУЗИТЬ (ОБНОВИТЬ)", this);
-    QPushButton *saveS = new QPushButton("СОХРАНИТЬ РАСПИСАНИЕ", this);
-    QPushButton *generateS = new QPushButton("СГЕНЕРИРОВАТЬ БАЗОВОЕ РАСПИСАНИЕ", this);
-    scheduleButtons->addWidget(loadS);
-    scheduleButtons->addWidget(saveS);
-    scheduleButtons->addWidget(generateS);
-    scheduleLayout->addLayout(scheduleButtons);
-
-    mainTabs->addTab(scheduleTab, "РАСПИСАНИЕ");
-
-    main->addWidget(mainTabs);
+    std::shared_ptr<User> user;
+    switch (role) {
+        case UserRole::Student:
+            user = std::make_shared<Student>(username, password);
+            break;
+        case UserRole::Teacher:
+            user = std::make_shared<Teacher>(username, password);
+            break;
+        case UserRole::Admin:
+            user = std::make_shared<Admin>(username, password);
+            break;
+    }
     
-    // Сохраняем ссылку на mainTabs
-    this->mainTabs = mainTabs;
-
-    // Кнопки в брутальном стиле
-    QHBoxLayout *bot = new QHBoxLayout();
-    QPushButton *viewGradesBtn = new QPushButton("ПРОСМОТРЕТЬ ОЦЕНКИ", this);
-    QPushButton *clearGradesBtn = new QPushButton("ОЧИСТИТЬ ВСЕ ОЦЕНКИ", this);
-    QPushButton *logoutBtn = new QPushButton("ВЫЙТИ", this);
-
-    bot->addWidget(viewGradesBtn);
-    bot->addWidget(clearGradesBtn);
-    bot->addStretch();
-    bot->addWidget(logoutBtn);
-
-    main->addLayout(bot);
-
-    connect(addT, &QPushButton::clicked, this, &AdminView::onAddTeacher);
-    connect(remT, &QPushButton::clicked, this, &AdminView::onRemoveTeacher);
-    connect(addA, &QPushButton::clicked, this, &AdminView::onAddAdmin);
-    connect(remA, &QPushButton::clicked, this, &AdminView::onRemoveAdmin);
-    connect(loadS, &QPushButton::clicked, this, &AdminView::onLoadSchedule);
-    connect(saveS, &QPushButton::clicked, this, &AdminView::onSaveSchedule);
-    connect(generateS, &QPushButton::clicked, this, &AdminView::onGenerateSchedule);
-    connect(viewGradesBtn, &QPushButton::clicked, this, &AdminView::onViewGrades);
-    connect(clearGradesBtn, &QPushButton::clicked, this, &AdminView::onClearGrades);
-    connect(logoutBtn, &QPushButton::clicked, this, &AdminView::onLogout);
+    if (DataStore::getInstance().addUser(user)) {
+        QMessageBox::information(this, "Успех", "Пользователь добавлен");
+        usernameEdit->clear();
+        passwordEdit->clear();
+        loadUsers();
+    } else {
+        QMessageBox::warning(this, "Ошибка", "Пользователь с таким именем уже существует");
+    }
 }
 
-void AdminView::onLogout() { close(); }
-
-void AdminView::onAddTeacher() {
-    bool ok;
-    QString username = QInputDialog::getText(this, "Добавить учителя", "Имя пользователя:", QLineEdit::Normal, "", &ok);
-    if (!ok || username.trimmed().isEmpty()) return;
-    QString pwd = QInputDialog::getText(this, "Пароль", "Пароль для учителя:", QLineEdit::Password, "", &ok);
-    if (!ok) return;
-    DataStore ds;
-    ds.addTeacher(username.trimmed(), pwd);
-    teachersList->addItem(username.trimmed());
-}
-
-void AdminView::onRemoveTeacher() {
-    if (!teachersList->currentItem()) return;
-    QString u = teachersList->currentItem()->text();
-    DataStore ds;
-    ds.removeTeacher(u);
-    delete teachersList->takeItem(teachersList->currentRow());
-}
-
-void AdminView::onAddAdmin() {
-    bool ok;
-    QString username = QInputDialog::getText(this, "Добавить администратора", "Имя пользователя:", QLineEdit::Normal, "", &ok);
-    if (!ok || username.trimmed().isEmpty()) return;
-    QString pwd = QInputDialog::getText(this, "Пароль", "Пароль для администратора:", QLineEdit::Password, "", &ok);
-    if (!ok) return;
-    DataStore ds;
-    ds.addAdmin(username.trimmed(), pwd);
-    adminsList->addItem(username.trimmed());
-}
-
-void AdminView::onRemoveAdmin() {
-    if (!adminsList->currentItem()) return;
-    QString u = adminsList->currentItem()->text();
-    DataStore ds;
-    ds.removeAdmin(u);
-    delete adminsList->takeItem(adminsList->currentRow());
-}
-
-void AdminView::onLoadSchedule() {
-    DataStore ds;
-    auto lines = ds.loadSchedule();
-    scheduleEdit->clear();
-    for (auto &l : lines) scheduleEdit->append(l);
-}
-
-void AdminView::onSaveSchedule() {
-    QString all = scheduleEdit->toPlainText();
-    QVector<QString> lines = all.split('\n').toVector();
-    DataStore ds;
-    if (ds.saveSchedule(lines)) QMessageBox::information(this, "OK", "Расписание сохранено.");
-    else QMessageBox::warning(this, "Ошибка", "Не удалось сохранить расписание.");
-}
-
-void AdminView::onGenerateSchedule() {
-    DataStore ds;
-    ds.generateDefaultSchedule();
-    onLoadSchedule(); // Обновляем отображение
-    QMessageBox::information(this, "УСПЕШНО", "Базовое расписание сгенерировано и загружено.");
-}
-
-void AdminView::onViewGrades() {
-    DataStore ds;
-    auto grades = ds.loadGrades();
-    QString txt;
-    for (auto &g : grades) txt += g + "\n";
-    QMessageBox::information(this, "Оценки", txt.isEmpty() ? "Нет оценок" : txt);
-}
-
-void AdminView::onClearGrades() {
-    if (QMessageBox::question(this, "Подтвердите", "Удалить все оценки?") != QMessageBox::Yes) return;
-    DataStore ds;
-    ds.overwriteGrades({});
-    QMessageBox::information(this, "OK", "Оценки удалены.");
+void AdminView::onDeleteUserClicked() {
+    int currentRow = usersTable->currentRow();
+    if (currentRow < 0) {
+        QMessageBox::warning(this, "Ошибка", "Выберите пользователя для удаления");
+        return;
+    }
+    
+    QString username = usersTable->item(currentRow, 0)->text();
+    
+    int ret = QMessageBox::question(this, "Подтверждение", 
+                                   "Вы уверены, что хотите удалить пользователя " + username + "?",
+                                   QMessageBox::Yes | QMessageBox::No);
+    
+    if (ret == QMessageBox::Yes) {
+        // Simple implementation - in real app would need proper user deletion
+        QMessageBox::information(this, "Информация", "Функция удаления пользователей будет реализована в полной версии");
+    }
 }

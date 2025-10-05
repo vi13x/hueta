@@ -1,84 +1,78 @@
 cmake_minimum_required(VERSION 3.16)
-
-project(test1 VERSION 0.1 LANGUAGES CXX)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+project(AcademicLedger)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+# Попробуем найти Qt6, если не найдется - попробуем Qt5
+find_package(Qt6 COMPONENTS Core Widgets QUIET)
 
-set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        main.cpp
-        main.cpp
-)
-
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(test1
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        mainwindow.h
-        datastore.h datastore.cpp
-        logindialog.h logindialog.cpp
-        studentview.h studentview.cpp
-        adminview.h adminview.cpp
-        teacherview.h teacherview.cpp
-        user.h
-        registrationdialog.h registrationdialog.cpp
-        markdialog.h markdialog.cpp
-            main.cpp
-    )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET test1 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(test1 SHARED
-            ${PROJECT_SOURCES}
-                main.cpp
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+# Если Qt6 не найден, попробуем Qt5
+if(NOT Qt6_FOUND)
+    find_package(Qt5 COMPONENTS Core Widgets QUIET)
+    if(Qt5_FOUND)
+        set(QT_VERSION_MAJOR 5)
+        message(STATUS "Найден Qt5")
     else()
-        add_executable(test1
-            ${PROJECT_SOURCES}
-                main.cpp
+        message(FATAL_ERROR 
+            "Qt не найден!\n\n"
+            "Для сборки проекта необходимо установить Qt5 или Qt6.\n"
+            "Инструкции по установке см. в файле INSTALL_QT.md\n\n"
+            "Возможные решения:\n"
+            "1. Установите Qt через официальный установщик\n"
+            "2. Установите Qt через vcpkg\n"
+            "3. Установите переменную CMAKE_PREFIX_PATH в CLion\n"
+            "4. Перезапустите CLion после установки Qt"
         )
     endif()
+else()
+    set(QT_VERSION_MAJOR 6)
+    message(STATUS "Найден Qt6")
 endif()
 
-target_link_libraries(test1 PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.test1)
-endif()
-set_target_properties(test1 PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+add_executable(AcademicLedger 
+    main.cpp
+    user.cpp
+    datastore.cpp
+    mainwindow.cpp
+    logindialog.cpp
+    registrationdialog.cpp
+    studentview.cpp
+    teacherview.cpp
+    adminview.cpp
+    init_demo_data.cpp
+        mainwindow.cpp
 )
 
-include(GNUInstallDirs)
-install(TARGETS test1
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+# Copy stylesheet to build directory
+configure_file(brutal_style.qss ${CMAKE_BINARY_DIR}/brutal_style.qss COPYONLY)
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(test1)
+    target_link_libraries(AcademicLedger Qt6::Core Qt6::Widgets)
+else()
+    target_link_libraries(AcademicLedger Qt5::Core Qt5::Widgets)
 endif()
+
+if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    # Find windeployqt reliably (works in CLion if CMAKE_PREFIX_PATH is set in Profile)
+    find_program(WINDEPLOYQT_EXECUTABLE
+        NAMES windeployqt windeployqt.exe
+        HINTS
+            "${CMAKE_PREFIX_PATH}/bin"
+            "$ENV{CMAKE_PREFIX_PATH}/bin"
+        PATHS
+            "${CMAKE_PREFIX_PATH}/bin"
+            "$ENV{CMAKE_PREFIX_PATH}/bin"
+        PATH_SUFFIXES bin
+    )
+
+    if (WINDEPLOYQT_EXECUTABLE)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND "${WINDEPLOYQT_EXECUTABLE}" --no-compiler-runtime --release "$<TARGET_FILE:${PROJECT_NAME}>"
+            COMMENT "Running windeployqt to deploy Qt runtime dependencies")
+    else()
+        message(STATUS "windeployqt not found. To run from CLion, add Qt bin to PATH or set CMAKE_PREFIX_PATH.")
+    endif()
+endif ()
